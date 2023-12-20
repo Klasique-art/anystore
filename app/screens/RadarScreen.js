@@ -5,6 +5,7 @@ import colors from '../config/colors';
 import Screen from '../components/Screen';
 import SearchInput from '../components/SearchInput';
 import AppText from '../components/AppText';
+import RadarList from '../components/RadarList';
 
 function RadarScreen(props) {
   return (
@@ -18,7 +19,9 @@ function RadarScreen(props) {
             />
             <AppText style={styles.text}>Track your products to get notified of changed prices.</AppText>
         </View>
-        <View style={styles.container}></View>
+        <View style={styles.container}>
+          <RadarList />
+        </View>
     </Screen>
   );
 }
@@ -32,7 +35,13 @@ const styles = StyleSheet.create({
     screen: {
         backgroundColor: colors.midnight,
         padding: 10,
-    }
+    },
+    text: {
+        color: colors.white,
+        marginVertical: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });
 
 export default RadarScreen;

@@ -4,7 +4,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import AccountNavigator from './AccountNavigator'
 import colors from '../config/colors'
 import ProductNavigator from './ProductNavigator'
-import RadarScreen from '../screens/RadarScreen'
+import RadarNavigation from './RadarNavigation'
+import FriendlyScreen from '../screens/FriendlyScreen'
 
 const Tab = createBottomTabNavigator()
 
@@ -14,7 +15,7 @@ const AppNavigator = () => {
         tabBarOptions={{
             activeTintColor: colors.amberGlowLight,
             activeBackgroundColor: colors.midnight,
-            inactiveBackgroundColor: colors.mistyLight, 
+            inactiveBackgroundColor: colors.horizon, 
             inactiveTintColor: colors.misty,
             labelStyle: {
                 fontSize: 14,
@@ -35,11 +36,21 @@ const AppNavigator = () => {
         />
         <Tab.Screen 
             name='Radar' 
-            component={RadarScreen} 
+            component={RadarNavigation} 
             options={{
               headerShown: false,
               tabBarIcon: ({color, size}) => (
                 <MaterialCommunityIcons name='radar' color={color} size={size}/>
+              ),
+            }}
+        />
+        <Tab.Screen 
+            name='Friendly' 
+            component={FriendlyScreen} 
+            options={{
+              headerShown: false,
+              tabBarIcon: ({color, size}) => (
+                <MaterialCommunityIcons name='chat-processing' color={color} size={size}/>
               ),
             }}
         />

@@ -39,7 +39,7 @@ const CardList = () => {
 
   const handleDelete = item => {
     const newCartData = cartData.filter(i => i.id !== item.id)
-    setCartData(newCartData)
+    setCartData(newCartData) 
   }
   const handleCartItemPress = item => {
     navigation.navigate(routes.PRODUCT_DETAILS, item)

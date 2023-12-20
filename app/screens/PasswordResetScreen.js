@@ -37,7 +37,6 @@ const PasswordResetScreen = () => {
                 name="newPassword1"
                 autoCapitalize="none" 
                 autoCorrect={false}    
-                keyboardType="password"  
                 textContentType="password"
                 icon="lock" 
                 placeholder="Enter new password" 
@@ -49,7 +48,6 @@ const PasswordResetScreen = () => {
                 name="newPassword2"
                 autoCapitalize="none" 
                 autoCorrect={false}    
-                keyboardType="password" 
                 textContentType="password"
                 icon="lock" 
                 placeholder="Confirm new password" 

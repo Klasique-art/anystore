@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 import AppText from '../components/AppText';
@@ -7,8 +7,9 @@ import Accordion from '../components/Accordion';
 import AppButton from '../components/AppButton'; 
 import Icon from '../components/Icon';
 import Screen from '../components/Screen';
+import routes from '../navigation/routes';
 
-function ProductDetails({route}) {
+function ProductDetails({route, navigation}) {
     const product = route.params;
     
     const handleAddToCart = productID =>{
@@ -20,6 +21,13 @@ function ProductDetails({route}) {
     const handleAddToRadar = productID => {
         console.log("added to radar", productID)
     }
+    const handleAddToFavStores = store => {
+        console.log("added to fav stores", store)
+    }
+    const handleShare = id => {
+        navigation.navigate(routes.SHARE_SCREEN, id)
+    }
+ 
   return (
     <Screen style={styles.screen}>
 
@@ -30,7 +38,22 @@ function ProductDetails({route}) {
                     <AppText style={styles.name} numberOfLines={1}>{product.name}</AppText>
                     <AppText style={styles.price}>${product.price}</AppText>
                 </View>
-                <AppText style={styles.store}>{product.store}</AppText>
+                {product.store && 
+                    <View style={styles.storeWrapper}>
+                        <AppText style={styles.store}>{product.store}</AppText>
+                        <TouchableOpacity 
+                            style={{flexDirection: "row", alignItems: "center"}} 
+                            onPress={()=> handleAddToFavStores(product.store)}
+                        >
+                            <AppText style={styles.heart}>Add to favorite stores</AppText>
+                            <Icon
+                                name="heart"
+                                size={25}
+                                color={colors.punch}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                }
                 <View style={styles.buttonWrapper}>
                     <TouchableOpacity style={styles.addToCartButton} onPress={()=> handleAddToCart(product.id)}>
                         <AppText style={styles.cartText}>Add to cart</AppText>
@@ -46,11 +69,21 @@ function ProductDetails({route}) {
                         onPress={()=> handleBuyNow(product.id)}
                     />
                 </View>
-                <AppButton 
-                    title="Add to Radar"
-                    onPress={()=> handleAddToRadar(product.id)}
-                    style={styles.radar}
-                />
+                <View style={styles.radarShareWrapper}>
+                    <AppButton 
+                        title="Add to Radar"
+                        width='80%'
+                        onPress={()=> handleAddToRadar(product.id)}
+                        style={styles.radar}
+                    />
+                    <TouchableOpacity style={styles.share} onPress={()=> handleShare(product.id)}>
+                        <Icon 
+                            name="share"
+                            size={30}
+                            color={colors.amberGlow}
+                        />
+                    </TouchableOpacity>
+                </View>
                 <Accordion 
                     title="Description"
                     content={product.desc}
@@ -85,6 +118,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
         gap: 20,
+        marginVertical: 10,
         marginBottom: 20,
     },
   container: {
@@ -98,7 +132,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
         gap: 10,
-        marginBottom: 10,
     },
     detailsContainer: {
         padding: 20,
@@ -124,16 +157,37 @@ const styles = StyleSheet.create({
     },
     radar: {
         borderRadius: 5,
+    },
+    radarShareWrapper: {
         marginBottom: 20,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        gap: 20,
+        marginVertical: 10,
     },
     screen: {
         backgroundColor: colors.midnight,
     },
+    share: {
+        borderRadius: 5,
+        backgroundColor: colors.horizon,
+        padding: 10,
+        width: "15%",
+    },
     store: {
         fontSize: 18,
         color: colors.misty,
-        marginBottom: 20,
-    }
+    },
+    storeWrapper: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        gap: 20,
+        marginVertical: 10,
+    },
 });
 
 export default ProductDetails;

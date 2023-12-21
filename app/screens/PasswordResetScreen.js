@@ -24,8 +24,7 @@ const PasswordResetScreen = () => {
             <AppFormField 
                 name="oldPassword"
                 autoCapitalize="none" 
-                autoCorrect={false}    
-                keyboardType="password"  
+                autoCorrect={false}      
                 textContentType="password"
                 icon="lock" 
                 placeholder="Enter old password" 

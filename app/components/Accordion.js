@@ -19,7 +19,7 @@ const Accordion = ({ title, content }) => {
 
   const contentHeight = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 150], 
+    outputRange: [0, 120], 
   });
 
   return (
@@ -56,10 +56,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     overflow: 'hidden',
     width: "100%",
+    // backgroundColor: colors.horizon,
   },
   header: {
     padding: 15,
-    backgroundColor: colors.midnight,
+    backgroundColor: colors.midnightLight,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

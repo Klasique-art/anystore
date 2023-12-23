@@ -81,7 +81,7 @@ function StoreScreen() {
     <Screen style={styles.screen}>
         <View style={styles.header}>
             <SearchInput 
-                placeholder="Search product from this store"  
+                placeholder="Search within this Store"  
                 placeholderTextColor={colors.misty}
             />
         </View>

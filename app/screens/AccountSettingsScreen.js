@@ -1,13 +1,22 @@
-import { View, Text, FlatList, StyleSheet, Alert } from 'react-native'
-import React from 'react'
+import { View, Text, FlatList, StyleSheet, Alert, Button, Image } from 'react-native'
+import React, {useEffect, useState} from 'react'
+import * as ImagePicker from 'expo-image-picker'
 
 import Screen from '../components/Screen'
 import colors from '../config/colors'
 import ListItem from '../components/ListItem'
 import Icon from '../components/Icon'
 import AppButton from '../components/AppButton'
+import ImageInput from '../components/ImageInput'
 
 const settingsData = [
+  {
+      title: "Name",
+      subTitle: "Klasique",
+      icon: "account",  
+      color: colors.amberGlowLight,
+      targetScreen: "NameReset",
+  },
   {
       title: "Email",
       subTitle: "feboapong@gmail.com",
@@ -27,10 +36,12 @@ const settingsData = [
 ]
 
 const AccountSettingsScreen = ({navigation}) => {
+  const [imageUri, setImageUri] = useState()
+
   const logoutAlert = () => {
     Alert.alert(
         "Log Out",
-        "Are you sure you want to log out of your account?",
+        "Are you sure you want to log out?",
         [
             { text: "No" },
             { text: "Yes", onPress: ()=> console.log("logged out") },
@@ -38,12 +49,29 @@ const AccountSettingsScreen = ({navigation}) => {
         { cancelable: false }
     )
 }
+
+  const selectImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync()
+      if (!result.canceled)
+        setImageUri(result.uri)
+    } catch (error) {
+      console.log("Error reading an image", error)
+    }
+  }
+
   return (
     <Screen style={styles.screen}>
       <View>
         <Text style={styles.heading}>Account Settings</Text>
       </View>
       <View style={styles.itemsContainer}>
+        <View style={{marginBottom: 20}}>
+          <ImageInput 
+            imageUri={imageUri} 
+            onChangeImage={uri => setImageUri(uri)}
+          />
+        </View>
         <FlatList 
           data={settingsData}
           keyExtractor={item => item.title}

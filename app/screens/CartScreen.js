@@ -10,7 +10,7 @@ const CartScreen = () => {
   return (
     <Screen style={styles.screen}>
         <View style={styles.headBox}>
-            <SearchInput placeholder="search product" placeholderTextColor={colors.amberGlow} />
+            <SearchInput placeholder="Search Product" placeholderTextColor={colors.amberGlow} />
         </View>
         <View style={{paddingBottom: 150, height: "100%"}}>
             <CardList />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Image } from 'react-native';
 
 import colors from '../config/colors';
 import ListItem from '../components/ListItem';
@@ -12,16 +12,19 @@ userData =
           id: 1,
           title: "John Doe",
           subtitle: "johndoe",
+          image: require("../assets/apple.png"),
         },
         {
           id: 2,
           title: "Jane Doe",
           subtitle: "janedoe",
+          image: require("../assets/apple.png"),
         },
         {
           id: 3,
           title: "John Smith",
           subtitle: "johnsmith",
+          image: require("../assets/apple.png"),
         },
       ]
 
@@ -30,7 +33,7 @@ function ShareScreen(props) {
     <Screen style={styles.screen}>
       <View style={styles.header}>
         <SearchInput 
-            placeholder="Search for user"
+            placeholder="Search User"
             placeholderTextColor={colors.misty}
             searchPress={()=> console.log("search pressed")}
         />
@@ -42,6 +45,12 @@ function ShareScreen(props) {
           renderItem={({ item }) => (
             <ListItem
               title={item.title}
+              IconComponent={<Image 
+                                backgroundColor={colors.mistyLight} 
+                                name="account" 
+                                source={item.image}
+                                style={{height: 50, width: 50, borderRadius: 25}}
+                              />}
               subtitle={item.subtitle}
               onPress={()=> console.log("pressed", item.id)}
             />

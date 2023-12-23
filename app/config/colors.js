@@ -4,6 +4,7 @@ export default {
     lighter: 'rgba(255,255,255,0.1)',
     black: '#000',
     midnight: '#1a2f56', // text color
+    midnightLight: 'rgba(106, 147, 186,.3)', // text color
     horizon: '#425d85', // bg color
     misty: '#7f9abd', // bg color
     mistyLight: 'rgba(127, 154, 189,.6)', // bg color

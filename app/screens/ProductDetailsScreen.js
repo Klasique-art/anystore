@@ -45,7 +45,7 @@ function ProductDetails({route, navigation}) {
                             style={{flexDirection: "row", alignItems: "center"}} 
                             onPress={()=> handleAddToFavStores(product.store)}
                         >
-                            <AppText style={styles.heart}>Add to favorite stores</AppText>
+                            <AppText style={styles.heart}>Add to Favorite Stores</AppText>
                             <Icon
                                 name="heart"
                                 size={25}
@@ -72,7 +72,7 @@ function ProductDetails({route, navigation}) {
                 <View style={styles.radarShareWrapper}>
                     <AppButton 
                         title="Add to Radar"
-                        width='80%'
+                        width='70%'
                         onPress={()=> handleAddToRadar(product.id)}
                         style={styles.radar}
                     />
@@ -82,10 +82,11 @@ function ProductDetails({route, navigation}) {
                             size={30}
                             color={colors.amberGlow}
                         />
+                        <AppText style={styles.shareText}>SHARE</AppText>
                     </TouchableOpacity>
                 </View>
                 <Accordion 
-                    title="Description"
+                    title="Product Information"
                     content={product.desc}
                 />
                
@@ -120,6 +121,9 @@ const styles = StyleSheet.create({
         gap: 20,
         marginVertical: 10,
         marginBottom: 20,
+    },
+    cartText: {
+        textTransform: "uppercase",
     },
   container: {
     width: '100%',
@@ -173,8 +177,13 @@ const styles = StyleSheet.create({
     share: {
         borderRadius: 5,
         backgroundColor: colors.horizon,
-        padding: 10,
-        width: "15%",
+        padding: 5,
+        width: "25%",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    shareText: {
+        fontSize: 14,
     },
     store: {
         fontSize: 18,

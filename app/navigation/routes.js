@@ -3,6 +3,6 @@ export default Object.freeze({
     FAVORITES: 'Favorites',
     PRODUCT_DETAILS: 'ProductDetails',
     SHARE_SCREEN: 'ShareScreen',
-    REGISTER: 'Register',
+    REGISTER: 'SignUp',
     LOGIN: 'Login',
 })

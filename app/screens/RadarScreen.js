@@ -12,12 +12,12 @@ function RadarScreen(props) {
     <Screen style={styles.screen}>
         <View style={styles.header}>
             <SearchInput
-                placeholder="Search products"
+                placeholder="Search by Keyword"
                 placeholderTextColor={colors.amberGlowLight}
                 icon="magnify"
                 width="90%"
             />
-            <AppText style={styles.text}>Track your products to get notified of changed prices.</AppText>
+            <AppText style={styles.text}>Track your products to get notified of price changes.</AppText>
         </View>
         <View style={styles.container}>
           <RadarList />

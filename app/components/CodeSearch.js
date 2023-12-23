@@ -13,7 +13,7 @@ const CodeSearch = () => {
   }
   return (
     <TouchableHighlight style={styles.searchBar} onPress={handleCodeSearch} underlayColor={colors.lighter}>
-        <AppText>Search by Barcode / QR code</AppText>
+        <AppText>Search by Barcode / QR Code</AppText>
     </TouchableHighlight>
   )
 }

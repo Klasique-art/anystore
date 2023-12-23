@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React, { useState } from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
 import { TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -34,7 +33,6 @@ const ProductsScreen = () => {
             {/* top bar */}
             <View style={styles.topBarContainer}>
                 <View style={styles.navbar}>
-                    <MaterialCommunityIcons name="menu" size={30} color={colors.white} onPress={navBarToggle} />
                     <Text style={{ color: colors.white, fontSize: 20, fontWeight: '900', marginLeft: 10 }}>Anystore</Text>
                     <View style={styles.iconBox}>
                         <TouchableOpacity onPress={handleFavorite}>
@@ -48,7 +46,7 @@ const ProductsScreen = () => {
                 <SearchInput
                     autoCapitalize="none"
                     autoCorrect={false}
-                    placeholder="search by keyword"
+                    placeholder="Search by Keyword"
                     placeholderTextColor={colors.misty}
                     onChangeText={text => setSearchText(text)}
                     onPress={handleSearch}
@@ -69,7 +67,7 @@ const ProductsScreen = () => {
 const styles = StyleSheet.create({
     iconBox: {
         flexDirection: "row",
-        gap: 10,
+        gap: 20,
     },
     mainBody: {
         width: '100%',

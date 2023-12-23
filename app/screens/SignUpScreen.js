@@ -8,6 +8,7 @@ import routes from '../navigation/routes'
 import Screen from '../components/Screen'
 
 const validationSchema = Yup.object().shape({
+    userName: Yup.string().required().label("Username").min(3),
     email: Yup.string().required().email().label("Email"),
     password1: Yup.string().required().min(8).label("Password"),
     password2: Yup.string().required().min(8).label("Password"),
@@ -23,10 +24,18 @@ const SignUpScreen = ({navigation}) => {
         </View>
         <View style={styles.signUpContainer}>
             <AppForm 
-                initialValues={{ email: "", password1: "", password2: ""}}
+                initialValues={{ userName: "", email: "", password1: "", password2: ""}}
                 onSubmit={values => console.log(values)}
                 validationSchema={validationSchema}
             >
+                <AppFormField
+                    name="userName"
+                    icon="account" 
+                    placeholder="Username" 
+                    label="Username" 
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                />
                 <AppFormField
                     name="email"
                     icon="email" 
@@ -47,7 +56,7 @@ const SignUpScreen = ({navigation}) => {
                     textContentType="password"
                 />
                 <AppFormField
-                    name="password2"
+                    name="password2" 
                     icon="lock" 
                     placeholder="Confirm password" 
                     label="confirm password" 
@@ -90,8 +99,7 @@ const styles = StyleSheet.create({
    },
    loginBox: {
         width: '100%',
-        paddingVertical: 20,
-        height: "25%",  
+        height: "20%",  
         alignItems: 'center',
         justifyContent: 'center',
    },
@@ -99,7 +107,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
-        marginTop: 10,
         backgroundColor: colors.midnight,
    },
    signUpContainer: {

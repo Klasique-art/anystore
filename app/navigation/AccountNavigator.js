@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AccountSettingsScreen from '../screens/AccountSettingsScreen';
 import PasswordResetScreen from '../screens/PasswordResetScreen';
 import EmailResetScreen from '../screens/EmailResetScreen';
+import NameResetScreen from '../screens/NameResetScreen';
 import colors from '../config/colors';
 
 const Stack = createStackNavigator();
@@ -26,8 +27,16 @@ const AccountNavigator = () => {
             name="AccountSettings" 
             component={AccountSettingsScreen} 
             options={()=>({
-            headerShown: false,
+                headerShown: false,
             })}
+        />
+        <Stack.Screen
+            name="NameReset"
+            component={NameResetScreen}
+            options={{
+                title: "Reset Name",
+                headerShown: true,
+            }}
         />
         <Stack.Screen 
             name="PasswordReset" 

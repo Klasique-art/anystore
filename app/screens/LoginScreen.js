@@ -21,7 +21,7 @@ const LoginScreen = () => {
         <View style={styles.headerContainer}>
             <Image source={require("../assets/login.png")} style={styles.image} blurRadius={1.5} />
             <Text style={styles.heading}>Anystore</Text>
-            <Text style={styles.subHeading}>Your one stop search engine for all your shopping</Text>
+            <Text style={styles.subHeading}>Your one stop search engine for all your shopping needs.</Text>
         </View>
         <View style={styles.loginContainer}>
             <AppForm 

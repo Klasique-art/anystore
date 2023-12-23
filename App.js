@@ -6,6 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import colors from './app/config/colors';
 import AppNavigator from './app/navigation/AppNavigator';
 import OfflineNotice from './app/components/OfflineNotice';
+import LoginSignupNavigator from './app/navigation/LoginSignupNavigator';
+import WelcomeScreen from './app/screens/WelcomeScreen';
 
 
 export default function App() {
@@ -16,6 +18,7 @@ export default function App() {
       <NavigationContainer>
         <AppNavigator />
       </NavigationContainer>
+        {/* <LoginSignupNavigator /> */}
     </>
 
   );

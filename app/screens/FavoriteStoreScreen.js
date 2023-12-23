@@ -10,7 +10,7 @@ const FavoriteStoreScreen = () => {
   return (
     <Screen style={styles.screen}>
         <View style={styles.headBox}>
-            <SearchInput placeholder="search store" placeholderTextColor={colors.amberGlow} />
+            <SearchInput placeholder="Search Store" placeholderTextColor={colors.amberGlow} />
         </View>
         <View style={{paddingBottom: 180,paddingTop: 15, height: "100%",}}>
             <FavoriteStoreList />

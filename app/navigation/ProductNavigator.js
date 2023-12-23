@@ -31,6 +31,9 @@ const ProductNavigator = () => {
         <Stack.Screen
             name='ProductDetails'
             component={ProductDetails}
+            options={{
+                headerTitle: "Details",
+            }}
         />
         <Stack.Screen 
             name='ShareScreen' 

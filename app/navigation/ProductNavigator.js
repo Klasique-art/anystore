@@ -4,6 +4,7 @@ import FavAndCartNavigator from './FavAndCartNavigator'
 import ProductDetails from '../screens/ProductDetailsScreen'
 import colors from '../config/colors'
 import ShareScreen from '../screens/ShareScreen'
+import BarcodeScreen from '../screens/BarcodeScreen'
 
 const Stack = createStackNavigator()
 
@@ -40,6 +41,13 @@ const ProductNavigator = () => {
             component={ShareScreen}
             options={{
                 headerTitle: "Share",
+            }}
+        />
+        <Stack.Screen 
+            name='BarcodeScreen' 
+            component={BarcodeScreen}
+            options={{
+                headerTitle: "Barcode",
             }}
         />
     </Stack.Navigator>

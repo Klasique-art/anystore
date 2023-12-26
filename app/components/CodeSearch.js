@@ -1,33 +1,40 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, {useState} from 'react'
-import AppText from './AppText'
-import colors from '../config/colors'
-import { TouchableHighlight } from 'react-native'
+import { StyleSheet } from 'react-native';
+import React from 'react';
+import { TouchableHighlight } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-
+import AppText from './AppText';
+import colors from '../config/colors';
 
 const CodeSearch = () => {
+  const navigation = useNavigation();
 
-  const handleCodeSearch = ()=> {
-    console.log("qr code or bar code")
-  }
+  const handleCodeSearch = () => {
+    navigation.navigate('BarcodeScreen');
+  };
+
   return (
-    <TouchableHighlight style={styles.searchBar} onPress={handleCodeSearch} underlayColor={colors.lighter}>
-        <AppText>Search by Barcode / QR Code</AppText>
+    <TouchableHighlight
+      style={styles.searchBar}
+      onPress={handleCodeSearch}
+      underlayColor={colors.lighter}
+    >
+      <AppText>Search by Barcode / QR Code</AppText>
     </TouchableHighlight>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   searchBar: {
-    width: "90%",
-    alignSelf: "center",
+    width: '90%',
+    alignSelf: 'center',
     height: 50,
     backgroundColor: colors.light,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 5,
-  }
-})
+  },
+});
 
-export default CodeSearch
+export default CodeSearch;
+

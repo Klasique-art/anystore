@@ -1,42 +1,20 @@
-import { View, Text, FlatList, StyleSheet, Alert, Button, Image } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import { View, Text, StyleSheet, Alert} from 'react-native'
+import React, {useState} from 'react'
 import * as ImagePicker from 'expo-image-picker'
 
+import useAuth from '../auth/useAuth'
 import Screen from '../components/Screen'
 import colors from '../config/colors'
 import ListItem from '../components/ListItem'
 import Icon from '../components/Icon'
 import AppButton from '../components/AppButton'
 import ImageInput from '../components/ImageInput'
-
-const settingsData = [
-  {
-      title: "Name",
-      subTitle: "Klasique",
-      icon: "account",  
-      color: colors.amberGlowLight,
-      targetScreen: "NameReset",
-  },
-  {
-      title: "Email",
-      subTitle: "feboapong@gmail.com",
-      icon:"email",  
-      color: colors.amberGlowLight,
-      targetScreen: "EmailReset",
-  },
-  {
-      title: "Password",
-      subTitle: "*****",
-      icon:"lock",  
-      color: colors.misty,
-      targetScreen: "PasswordReset",
-  },
-  
-
-]
+import routes from '../navigation/routes'
 
 const AccountSettingsScreen = ({navigation}) => {
+  const {user, logOut} = useAuth()
   const [imageUri, setImageUri] = useState()
+
 
   const logoutAlert = () => {
     Alert.alert(
@@ -44,7 +22,7 @@ const AccountSettingsScreen = ({navigation}) => {
         "Are you sure you want to log out?",
         [
             { text: "No" },
-            { text: "Yes", onPress: ()=> console.log("logged out") },
+            { text: "Yes", onPress: () => logOut() },
         ],
         { cancelable: false }
     )
@@ -66,32 +44,38 @@ const AccountSettingsScreen = ({navigation}) => {
         <Text style={styles.heading}>Account Settings</Text>
       </View>
       <View style={styles.itemsContainer}>
-        <View style={{marginBottom: 20}}>
+        <View style={{marginBottom: 20,}}>
           <ImageInput 
             imageUri={imageUri} 
             onChangeImage={uri => setImageUri(uri)}
           />
         </View>
-        <FlatList 
-          data={settingsData}
-          keyExtractor={item => item.title}
-          renderItem={({item})=> (
-            <ListItem 
-              title={item.title}
-              subtitle={item.subTitle}
-              IconComponent={<Icon 
-                                name={item.icon}  
-                                size={35}
-                                color={item.color}
-                                backgroundColor={item.icon.backgroundColor} 
-                              />}
-              onPress={()=> navigation.navigate(item.targetScreen)}
-              Chevron
-            />
-          )}
-          ItemSeparatorComponent={() => <View style={{width: "100%", height: 5, backgroundColor: colors.lighter}} />}
+        <View style={styles.listContainer}>
+          <ListItem 
+            title="Name"
+            subtitle="Klasique"
+            IconComponent={<Icon name="account" size={30} color={colors.amberGlow} />}
+            onPress={()=> navigation.navigate(routes.NAME_RESET)}
+          />
+          <ListItem 
+            title="Email"
+            subtitle={user.email}
+            IconComponent={<Icon name="email" size={30} color={colors.amberGlow} />}
+            onPress={()=> navigation.navigate(routes.EMAIL_RESET)}
+          />
+           <ListItem 
+            title="Password"
+            subtitle="*********"
+            IconComponent={<Icon name="email" size={30} color={colors.amberGlow} />}
+            onPress={()=> navigation.navigate(routes.PASSWORD_RESET)}
+          />
+        </View>
+        <AppButton 
+          title="Log Out" 
+          color={colors.amberGlowLight} 
+          onPress={logoutAlert} 
+          style={{marginTop:"auto"}}
         />
-        <AppButton title="Log Out" color={colors.amberGlowLight} onPress={logoutAlert} />
       </View>
     </Screen>
   )
@@ -99,9 +83,9 @@ const AccountSettingsScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   itemsContainer: {
-    justifyContent: "space-between",
     height: "90%",
     paddingVertical: 10,
+    gap : 10, 
   },
   heading: {
     color: colors.amberGlow,
@@ -111,6 +95,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.horizon,
     padding: 10,
     borderRadius: 5,
+  },
+  listContainer: {
+    marginBottom: 20,
+    gap: 15,
   },
   screen: {
     backgroundColor: colors.midnight,

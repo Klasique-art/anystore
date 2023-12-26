@@ -1,13 +1,15 @@
 import { View, StyleSheet, Image, Text } from 'react-native'
 import { TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, {useState,} from 'react'
 import * as Yup from 'yup' 
 import { useNavigation } from '@react-navigation/native'
 
 import Screen from '../components/Screen'
 import colors from '../config/colors'
 import routes from '../navigation/routes'
-import {AppForm, AppFormField, SubmitButton} from '../components/forms'
+import {AppForm, AppFormField, SubmitButton, ErrorMessage} from '../components/forms'
+import authApi from '../api/auth'
+import useAuth from '../auth/useAuth'
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label("Email"),
@@ -15,7 +17,18 @@ const validationSchema = Yup.object().shape({
 })
 
 const LoginScreen = () => {
+    const {logIn} = useAuth()
+    const [loginFailed, setLoginFailed] = useState(false)
     const navigation = useNavigation()
+
+    const handleSubmit = async ({email, password}) => {
+        const result = await authApi.login(email, password)
+        if(!result.ok) return setLoginFailed(true)
+        setLoginFailed(false)
+        const token = result.data.token
+        logIn(token)
+    }
+
   return (
     <Screen style={styles.screen}>
         <View style={styles.headerContainer}>
@@ -26,9 +39,10 @@ const LoginScreen = () => {
         <View style={styles.loginContainer}>
             <AppForm 
                 initialValues={{email: "", password: ""}} 
-                onSubmit={values => console.log(values)} 
+                onSubmit={handleSubmit} 
                 validationSchema={validationSchema} 
             >
+                <ErrorMessage error="Invalid email or password" visible={loginFailed} />
                 <AppFormField 
                         name="email"
                         autoCapitalize="none" 
@@ -45,7 +59,8 @@ const LoginScreen = () => {
                         label="password" 
                         autoCapitalize="none" 
                         secureTextEntry 
-                        autoCorrect={false} textContentType="password" 
+                        autoCorrect={false} 
+                        textContentType="password" 
                     />
                     <SubmitButton title="Login" width="90%" />
             </AppForm>

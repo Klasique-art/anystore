@@ -5,4 +5,7 @@ export default Object.freeze({
     SHARE_SCREEN: 'ShareScreen',
     REGISTER: 'SignUp',
     LOGIN: 'Login',
+    NAME_RESET: 'NameReset',
+    PASSWORD_RESET: 'PasswordReset',
+    EMAIL_RESET: 'EmailReset',
 })

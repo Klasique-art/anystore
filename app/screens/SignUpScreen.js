@@ -1,20 +1,46 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
 import * as Yup from 'yup'
 
-import {AppForm, AppFormField, SubmitButton} from '../components/forms'
+import {AppForm, AppFormField, SubmitButton, ErrorMessage} from '../components/forms'
 import colors from '../config/colors'
 import routes from '../navigation/routes'
 import Screen from '../components/Screen'
+import usersApi from '../api/users'
+import authApi from '../api/auth'
+import useAuth from '../auth/useAuth';
 
 const validationSchema = Yup.object().shape({
     userName: Yup.string().required().label("Username").min(3),
     email: Yup.string().required().email().label("Email"),
-    password1: Yup.string().required().min(8).label("Password"),
-    password2: Yup.string().required().min(8).label("Password"),
+    password: Yup.string().required().min(8).label("Password"),
 })
 
 const SignUpScreen = ({navigation}) => {
+    const [error, setError] = useState()
+    const auth = useAuth()
+
+    const handleSubmit = async (userInfo) => {
+       const result = await usersApi.register(userInfo)
+
+       if(!result.ok) {
+        if(result.data) {
+            setError(JSON.stringify(result.data));
+        }
+        else {
+            setError("An unexpected error occurred.")
+            console.log(result)
+        }
+        return;
+       }
+       console.log(userInfo.email)
+       const response = await authApi.login(
+                                            userInfo.email, 
+                                            userInfo.password)
+        auth.logIn(response.data.token)
+    }
+    
+
   return (
     <Screen style={{backgroundColor: colors.midnight}}>
          <View style={styles.headerContainer}>
@@ -24,14 +50,17 @@ const SignUpScreen = ({navigation}) => {
         </View>
         <View style={styles.signUpContainer}>
             <AppForm 
-                initialValues={{ userName: "", email: "", password1: "", password2: ""}}
-                onSubmit={values => console.log(values)}
+                initialValues={{ userName: "", email: "", password: ""}}
+                onSubmit={handleSubmit}
                 validationSchema={validationSchema}
             >
+                <ErrorMessage error={error} visible={error} />
+
                 <AppFormField
                     name="userName"
                     icon="account" 
                     placeholder="Username" 
+                    placeholderTextColor={colors.white}
                     label="Username" 
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -40,26 +69,18 @@ const SignUpScreen = ({navigation}) => {
                     name="email"
                     icon="email" 
                     placeholder="Email" 
+                    placeholderTextColor={colors.white}
                     label="email" 
                     autoCapitalize="none"
                     autoCorrect={false}
                     textContentType="emailAddress"
                 />
                 <AppFormField
-                    name="password1"
+                    name="password"
                     icon="lock" 
-                    placeholder="Password" 
+                    placeholder="Password"
+                    placeholderTextColor={colors.white} 
                     label="password" 
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    secureTextEntry
-                    textContentType="password"
-                />
-                <AppFormField
-                    name="password2" 
-                    icon="lock" 
-                    placeholder="Confirm password" 
-                    label="confirm password" 
                     autoCapitalize="none"
                     autoCorrect={false}
                     secureTextEntry

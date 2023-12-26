@@ -6,7 +6,7 @@ import colors from '../config/colors'
 import routes from '../navigation/routes'
 
 const WelcomeScreen = ({navigation}) => {
-
+    
   return (
         < ImageBackground style={styles.background} source={require('../assets/welcome_bg.png')} blurRadius={4}>
             <View style={styles.headerContainer}>

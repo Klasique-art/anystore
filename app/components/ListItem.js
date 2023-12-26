@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native'
 import React from 'react'
 import colors from '../config/colors'
-import Icon from './Icon'
+import Icon from './Icon' 
 import AppText from './AppText'
 
 const ListItem = ({IconComponent, title, subtitle, onPress, Chevron}) => {

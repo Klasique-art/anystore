@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
+import ProductsFetchData from '../backend/ProductsFetchData'
 import Screen from '../components/Screen'
 import colors from '../config/colors'
 import CodeSearch from '../components/CodeSearch'
@@ -30,6 +31,7 @@ const ProductsScreen = () => {
 
     return (
         <Screen style={{ backgroundColor: colors.midnight }}>
+            <ProductsFetchData />
             {/* top bar */}
             <View style={styles.topBarContainer}>
                 <View style={styles.navbar}>

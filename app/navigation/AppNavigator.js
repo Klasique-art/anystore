@@ -45,7 +45,7 @@ const AppNavigator = () => {
             }}
         />
         <Tab.Screen 
-            name='Friendly' 
+            name='Crit' 
             component={FriendlyScreen} 
             options={{
               headerShown: false,

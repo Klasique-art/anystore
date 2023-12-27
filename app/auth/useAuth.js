@@ -2,7 +2,8 @@ import { useContext } from 'react';
 import jwt_decode from 'jwt-decode';
 
 import AuthContext from './context';
-import authStorage from './storage';
+import authStorage from './storage'; 
+import resetPassword from '../api/changePassword';
 
 export default useAuth = () => {
     const {user, setUser} = useContext(AuthContext)
@@ -17,6 +18,10 @@ export default useAuth = () => {
         setUser(null)
         authStorage.removeToken()
     }
+    const changePassword = async (newPassword) => {
+       
+      };
+    
 
-    return {user, logIn, logOut,}
+    return {user, logIn, logOut, changePassword}
 }

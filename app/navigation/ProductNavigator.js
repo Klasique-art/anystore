@@ -47,7 +47,7 @@ const ProductNavigator = () => {
             name='BarcodeScreen' 
             component={BarcodeScreen}
             options={{
-                headerTitle: "Barcode",
+                headerTitle: "Barcode / Qrcode scanner",
             }}
         />
     </Stack.Navigator>

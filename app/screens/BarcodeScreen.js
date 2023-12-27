@@ -43,7 +43,7 @@ function BarcodeScreen(props) {
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
               style={{width: "100%", height: "100%"}}
               />
-              {!scanned && <AppText style={{color: colors.white, textAlign: "center", fontSize: 14, marginVertical: 10}}>Point your camera at the barcode / qrcode</AppText>}
+              {!scanned && <AppText style={{color: colors.white, textAlign: "center", fontSize: 14, marginVertical: 10}}>Point your camera at the BAR/QR Code</AppText>}
               {scanned && <AppButton title={'Tap to Scan Again'} style={{
                 marginTop: 20,
               }} onPress={() => setScanned(false)} />}

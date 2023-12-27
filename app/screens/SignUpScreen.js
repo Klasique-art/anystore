@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
 import React, {useState} from 'react'
 import * as Yup from 'yup'
 
@@ -10,14 +10,18 @@ import usersApi from '../api/users'
 import authApi from '../api/auth'
 import useAuth from '../auth/useAuth';
 
+
 const validationSchema = Yup.object().shape({
-    userName: Yup.string().required().label("Username").min(3),
-    email: Yup.string().required().email().label("Email"),
-    password: Yup.string().required().min(8).label("Password"),
+    userName: Yup.string().required("Enter your name").label("Username").min(3, "Name too short").max(40, "Name too long"),
+    email: Yup.string().required("Please enter your email address").email().label("Email"),
+    password: Yup.string().required("You need to create a password").min(8).label("Password").matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Must contain at least one uppercase, one lowercase, one number and one symbol"),
+    confirmPassword: Yup.string().required("Confirm your password").label("Confirm Password").oneOf([Yup.ref('password')], 'Passwords must match')
 })
 
 const SignUpScreen = ({navigation}) => {
     const [error, setError] = useState()
+    const [isSecure, setIsSecure] = useState(true)
+    const [isConfirmSecure, setIsConfirmSecure] = useState(true)
     const auth = useAuth()
 
     const handleSubmit = async (userInfo) => {
@@ -25,7 +29,7 @@ const SignUpScreen = ({navigation}) => {
 
        if(!result.ok) {
         if(result.data) {
-            setError(JSON.stringify(result.data));
+            setError(result.data.message);
         }
         else {
             setError("An unexpected error occurred.")
@@ -33,7 +37,6 @@ const SignUpScreen = ({navigation}) => {
         }
         return;
        }
-       console.log(userInfo.email)
        const response = await authApi.login(
                                             userInfo.email, 
                                             userInfo.password)
@@ -43,59 +46,78 @@ const SignUpScreen = ({navigation}) => {
 
   return (
     <Screen style={{backgroundColor: colors.midnight}}>
-         <View style={styles.headerContainer}>
-            <Image source={require("../assets/signup.png")} style={styles.image} blurRadius={10} />
-            <Text style={styles.heading}>Anystore</Text>
-            <Text style={styles.subHeading}>Create an account</Text>
-        </View>
-        <View style={styles.signUpContainer}>
-            <AppForm 
-                initialValues={{ userName: "", email: "", password: ""}}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-            >
-                <ErrorMessage error={error} visible={error} />
-
-                <AppFormField
-                    name="userName"
-                    icon="account" 
-                    placeholder="Username" 
-                    placeholderTextColor={colors.white}
-                    label="Username" 
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                />
-                <AppFormField
-                    name="email"
-                    icon="email" 
-                    placeholder="Email" 
-                    placeholderTextColor={colors.white}
-                    label="email" 
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    textContentType="emailAddress"
-                />
-                <AppFormField
-                    name="password"
-                    icon="lock" 
-                    placeholder="Password"
-                    placeholderTextColor={colors.white} 
-                    label="password" 
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    secureTextEntry
-                    textContentType="password"
-                />
-                <SubmitButton title="Sign up" width="90%" />
-            </AppForm>
-            <View style={styles.loginBox}>
-                <Text style={{color: colors.white, alignSelf: "center", marginBottom: 10}}>Already have an account?
-                </Text>
-                <TouchableOpacity onPress={()=> navigation.navigate(routes.LOGIN)} style={styles.login}>
-                    <Text style={styles.text}> Login</Text>
-                </TouchableOpacity>
+      
+            <View style={styles.headerContainer}>
+                <Image source={require("../assets/signup.png")} style={styles.image} blurRadius={10} />
+                <Text style={styles.heading}>Anystore</Text>
+                <Text style={styles.subHeading}>Create an account</Text>
             </View>
-        </View>
+            <View style={styles.signUpContainer}>
+                <KeyboardAvoidingView
+                    behavior="position"
+                    keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
+                >
+                    <AppForm 
+                        initialValues={{ userName: "", email: "", password: "", confirmPassword: ""}}
+                        onSubmit={handleSubmit}
+                        validationSchema={validationSchema}
+                    >
+                        <ErrorMessage error={error} visible={error} />
+
+                        <AppFormField
+                            name="userName"
+                            icon="account" 
+                            placeholder="Username" 
+                            placeholderTextColor={colors.white}
+                            label="Username" 
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                        />
+                        <AppFormField
+                            name="email"
+                            icon="email" 
+                            placeholder="Email" 
+                            placeholderTextColor={colors.white}
+                            label="email" 
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            textContentType="emailAddress"
+                        />
+                        <AppFormField
+                            name="password"
+                            icon={isSecure ? "eye" : "eye-off"} 
+                            placeholder="Password"
+                            placeholderTextColor={colors.white} 
+                            label="password" 
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            secureTextEntry={isSecure}
+                            textContentType="password"
+                            onPress={text => setIsSecure(!isSecure)}
+                        />
+                        <AppFormField
+                            name="confirmPassword"
+                            icon={isConfirmSecure ? "eye" : "eye-off"}
+                            placeholder="Confirm Password"
+                            placeholderTextColor={colors.white} 
+                            label="confirm password" 
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            secureTextEntry={isConfirmSecure}
+                            onPress={text => setIsConfirmSecure(!isConfirmSecure)}
+                            textContentType="password"
+                        />
+                        <SubmitButton title="Sign up" width="90%" />
+                    </AppForm>
+                </KeyboardAvoidingView>
+                <View style={styles.loginBox}>
+                    <Text style={{color: colors.white, alignSelf: "center", marginBottom: 10}}>Already have an account?
+                    </Text>
+                    <TouchableOpacity onPress={()=> navigation.navigate(routes.LOGIN)} style={styles.login}>
+                        <Text style={styles.text}> Login</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
     </Screen>
   )
 }

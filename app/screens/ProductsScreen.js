@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import React, { useState, useEffect } from 'react'
+import React, { useState,} from 'react'
 import { TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
+import ActivityIndicator from '../components/ActivityIndicator'
 import ProductsFetchData from '../backend/ProductsFetchData'
 import Screen from '../components/Screen'
 import colors from '../config/colors'
@@ -58,13 +59,14 @@ const ProductsScreen = () => {
             {/* end of top bar */}
             {/* main body */}
             <View style={styles.mainBody}>
+                {/* <ActivityIndicator 
+                    visible={true}/> */}
                 <CardProducts />
             </View>
             {/* end of main body */}
         </Screen>
     )
 }
-
 
 const styles = StyleSheet.create({
     iconBox: {

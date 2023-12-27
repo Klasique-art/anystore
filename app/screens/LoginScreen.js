@@ -13,12 +13,13 @@ import useAuth from '../auth/useAuth'
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label("Email"),
-    password: Yup.string().required().min(8).label("Password"),
+    password: Yup.string().required("Please insert password").min(8).label("Password").matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Must contain at least one uppercase, one lowercase, one number and one symbol"),
 })
 
 const LoginScreen = () => {
     const {logIn} = useAuth()
     const [loginFailed, setLoginFailed] = useState(false)
+    const [isSecure, setIsSecure] = useState(true)
     const navigation = useNavigation()
 
     const handleSubmit = async ({email, password}) => {
@@ -55,12 +56,13 @@ const LoginScreen = () => {
                     <AppFormField 
                         name="password"
                         placeholder="Password" 
-                        icon="lock" 
+                        icon={isSecure ? "eye" : "eye-off"}
                         label="password" 
                         autoCapitalize="none" 
-                        secureTextEntry 
+                        secureTextEntry={isSecure} 
                         autoCorrect={false} 
                         textContentType="password" 
+                        onPress={() => setIsSecure(!isSecure)}
                     />
                     <SubmitButton title="Login" width="90%" />
             </AppForm>

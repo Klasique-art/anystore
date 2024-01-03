@@ -29,7 +29,7 @@ const NameResetScreen = () => {
                 textContentType="name"
             />
             <SubmitButton 
-                title="Reset name" 
+                title="Change name" 
                 width="90%"
                 color={colors.amberGlow}
                 textColor={colors.midnight}

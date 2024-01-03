@@ -1,26 +1,70 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
 import * as Yup from 'yup';
+import { useNavigation } from '@react-navigation/native';
 
 import colors from '../config/colors';
-import { AppForm, AppFormField, SubmitButton } from '../components/forms';
+import { AppForm, AppFormField, SubmitButton, ErrorMessage } from '../components/forms';
 import Screen from '../components/Screen';
+import changeEmail from '../api/changeEmail';
+import storage from '../auth/storage';
+import useAuth from '../auth/useAuth';
 
 const validationSchema = Yup.object().shape({
-    email: Yup.string().required().email().label("Email"),
+    email: Yup.string().required().email().label("Email"), 
 })
 
-
 function EmailResetScreen(props) {
+    const [error, setError] = useState()
+    const navigation = useNavigation()
+    const {user} = useAuth()
+
+    const handleChangeEmail = async ({email}) => {
+        try {
+            // Get the authentication token
+            const authToken = await storage.getToken();
+ 
+            if (!authToken) {
+                setError('Authentication token not found.');
+                console.error('Authentication token not found.');
+                return;
+            }
+
+            const result = await changeEmail.changeEmail(authToken, email);
+
+            if (!result.ok) {
+                setError(result.data.message);
+                return;
+            }
+
+            // set the new email in the user object
+            user.email = email;
+
+            // navigate to the account settings screen
+            Alert.alert(
+                "Email Changed",
+                "Your email has been changed successfully.",
+                [
+                    { text: "OK", onPress: () => navigation.navigate("AccountSettings") }
+                ],
+                { cancelable: false }
+            );
+
+        } catch (error) {
+            console.error('Error changing email:', error);
+        }
+    };
+
   return (
     <Screen style={styles.screen}>
 
         <View style={styles.container}>
             <AppForm
                 initialValues={{email: ""}}
-                onSubmit={values => console.log(values)}
+                onSubmit={handleChangeEmail}
                 validationSchema={validationSchema}
             >
+                {error && <ErrorMessage error={error} visible={error} />}
                 <AppFormField
                     name="email"
                     autoCapitalize="none"
@@ -32,7 +76,7 @@ function EmailResetScreen(props) {
                     textContentType="emailAddress"
                 />
                 <SubmitButton 
-                    title="Reset email" 
+                    title="Change email" 
                     width="90%"
                     color={colors.amberGlow}
                     textColor={colors.midnight}

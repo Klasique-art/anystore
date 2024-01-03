@@ -6,7 +6,7 @@ import {AppForm, AppFormField, SubmitButton, ErrorMessage} from '../components/f
 import colors from '../config/colors'
 import Screen from '../components/Screen'
 import resetPassword from '../api/changePassword'
-import useAuth from '../auth/useAuth'
+import storage from '../auth/storage'
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string().required("Enter your previous password").min(8).label("Password").matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Must contain at least one uppercase, one lowercase, one number and one symbol"),
@@ -19,13 +19,31 @@ const PasswordResetScreen = () => {
   const [isNewSecure, setIsNewSecure] = useState(true)
   const [isNewConfirmSecure, setIsNewConfirmSecure] = useState(true)
   const [error, setError] = useState()
-  const auth = useAuth()
 
-  const handleChangePassword = async ({oldPassword, newPassword1}) => {
-    const result = await resetPassword.resetPassword(oldPassword, newPassword1)
-    console.log(result.data)
-    
-  }
+  const handleChangePassword = async ({ oldPassword, newPassword1 }) => {
+    try {
+      // Get the authentication token
+      const authToken = await storage.getToken();
+
+      if (!authToken) {
+        setError('Authentication token not found.');
+        console.error('Authentication token not found.');
+        return;
+      }
+
+      const result = await resetPassword.resetPassword(authToken, oldPassword, newPassword1);
+
+      if (!result.ok) {
+        setError(result.data.message);
+        return;
+      }
+
+      alert('Password changed successfully.');
+
+    } catch (error) {
+      console.error('Error changing password:', error);
+    }
+  };
 
   return (
     <Screen style={styles.screen}>
@@ -38,7 +56,7 @@ const PasswordResetScreen = () => {
             onSubmit={handleChangePassword}
             validationSchema={validationSchema}
         >
-            <ErrorMessage error={error} visible={error} />
+          {error && <ErrorMessage error={error} visible={error} />}
             <AppFormField 
                 name="oldPassword"
                 autoCapitalize="none" 

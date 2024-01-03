@@ -8,7 +8,7 @@ const storeToken = async authToken => {
         await SecureStore.setItemAsync(key, authToken)
     } catch (error) {
         console.log("Error storing auth token", error)
-    }
+    } 
 }
 
 const getToken = async () => {
@@ -32,4 +32,4 @@ const removeToken = async () => {
     }
 }
 
-export default { getUser, removeToken, storeToken }
+export default { getUser, removeToken, storeToken, getToken }

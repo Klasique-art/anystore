@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native'
 import React, {useState} from 'react'
 import * as Yup from 'yup'
+import { ActivityIndicator } from 'react-native'
 
 import {AppForm, AppFormField, SubmitButton, ErrorMessage} from '../components/forms'
 import colors from '../config/colors'
@@ -22,10 +23,13 @@ const SignUpScreen = ({navigation}) => {
     const [error, setError] = useState()
     const [isSecure, setIsSecure] = useState(true)
     const [isConfirmSecure, setIsConfirmSecure] = useState(true)
+    const [loading, setLoading] = useState(false)
     const auth = useAuth()
 
     const handleSubmit = async (userInfo) => {
+        setLoading(true)
        const result = await usersApi.register(userInfo)
+        setLoading(false)
 
        if(!result.ok) {
         if(result.data) {
@@ -46,7 +50,6 @@ const SignUpScreen = ({navigation}) => {
 
   return (
     <Screen style={{backgroundColor: colors.midnight}}>
-      
             <View style={styles.headerContainer}>
                 <Image source={require("../assets/signup.png")} style={styles.image} blurRadius={10} />
                 <Text style={styles.heading}>Anystore</Text>
@@ -57,6 +60,7 @@ const SignUpScreen = ({navigation}) => {
                     behavior="position"
                     keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 100}
                 >
+                    <ActivityIndicator animating={loading} size="large" />
                     <AppForm 
                         initialValues={{ userName: "", email: "", password: "", confirmPassword: ""}}
                         onSubmit={handleSubmit}

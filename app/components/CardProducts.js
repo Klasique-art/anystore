@@ -1,9 +1,10 @@
 import { FlatList } from 'react-native'
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import ProductCard from './ProductCard'
 import routes from '../navigation/routes'
+import searchItemsApi from '../api/searchItems'
 
 const productData = [
     {                                                                                                                          
@@ -42,7 +43,22 @@ const productData = [
   ]
 
 const CardProducts = () => {
+  const [products, setProducts] = useState([])
   const navigation = useNavigation()
+
+  const loadProducts = async () => {
+    try {
+      const response = await searchItemsApi.searchItems();
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error loading products:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadProducts()
+  }, [])
+
   const handleProductPress = (item) => {
     navigation.navigate(routes.PRODUCT_DETAILS, item);
     navigation.setOptions({
@@ -52,7 +68,7 @@ const CardProducts = () => {
   return (
   
         <FlatList 
-            data={productData}
+            data={products}
             keyExtractor={(product) => product.id.toString()}
             renderItem={({item}) => (
                <ProductCard 
@@ -70,5 +86,4 @@ const CardProducts = () => {
         />
   )
 }
-
-export default CardProducts
+export default CardProducts 

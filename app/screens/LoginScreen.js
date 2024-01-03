@@ -3,6 +3,7 @@ import { TouchableOpacity } from 'react-native'
 import React, {useState,} from 'react'
 import * as Yup from 'yup' 
 import { useNavigation } from '@react-navigation/native'
+import { ActivityIndicator } from 'react-native'
 
 import Screen from '../components/Screen'
 import colors from '../config/colors'
@@ -20,13 +21,17 @@ const LoginScreen = () => {
     const {logIn} = useAuth()
     const [loginFailed, setLoginFailed] = useState(false)
     const [isSecure, setIsSecure] = useState(true)
+    const [loading, setLoading] = useState(false)
     const navigation = useNavigation()
 
     const handleSubmit = async ({email, password}) => {
+        setLoading(true)
         const result = await authApi.login(email, password)
+        setLoading(false)
+        
         if(!result.ok) return setLoginFailed(true)
         setLoginFailed(false)
-        const token = result.data.token
+        const token = result.data.token 
         logIn(token)
     }
 
@@ -38,6 +43,7 @@ const LoginScreen = () => {
             <Text style={styles.subHeading}>Your one stop search engine for all your shopping needs.</Text>
         </View>
         <View style={styles.loginContainer}>
+            <ActivityIndicator animating={loading} size="large" />
             <AppForm 
                 initialValues={{email: "", password: ""}} 
                 onSubmit={handleSubmit} 
@@ -61,7 +67,7 @@ const LoginScreen = () => {
                         autoCapitalize="none" 
                         secureTextEntry={isSecure} 
                         autoCorrect={false} 
-                        textContentType="password" 
+                        textContentType="password"  
                         onPress={() => setIsSecure(!isSecure)}
                     />
                     <SubmitButton title="Login" width="90%" />
@@ -77,11 +83,10 @@ const LoginScreen = () => {
                 <View style={{alignItems: "center", gap: 5}}>
                     <Text style={{color: colors.white, alignSelf: "center", marginTop: 10}}>Forgot password? 
                     </Text>
-                    <TouchableOpacity onPress={()=> console.log("reset")} style={styles.reset}>
+                    <TouchableOpacity onPress={()=> navigation.navigate(routes.FORGOT_PASSWORD)} style={styles.reset}>
                         <Text style={[styles.text, {color: colors.midnight, fontWeight: "bold"}]}>Reset</Text>
                     </TouchableOpacity>
                 </View>
-
             </View>
         </View>
     </Screen>

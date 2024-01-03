@@ -9,6 +9,7 @@ import OfflineNotice from './app/components/OfflineNotice';
 import AuthNavigation from './app/navigation/AuthNavigation';
 import AuthContext from './app/auth/context';
 import authStorage from './app/auth/storage';
+import socket from './app/api/socket';
 
 export default function App() {
   const [user, setUser] = useState()
@@ -18,7 +19,8 @@ export default function App() {
     if(user) setUser(user)
   }
 
-  useEffect(() => {
+useEffect(() => {
+    
     restoreUser()
   }, [])
 
@@ -29,7 +31,6 @@ export default function App() {
         {user ? <AppNavigator /> : <AuthNavigation />}
       </NavigationContainer>
     </AuthContext.Provider>
-
   );
 }
 

@@ -8,4 +8,5 @@ export default Object.freeze({
     NAME_RESET: 'NameReset',
     PASSWORD_RESET: 'PasswordReset',
     EMAIL_RESET: 'EmailReset',
+    FORGOT_PASSWORD: 'ForgotPassword',
 })

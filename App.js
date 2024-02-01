@@ -19,10 +19,9 @@ export default function App() {
     if(user) setUser(user)
   }
 
-useEffect(() => {
-    
+  useEffect(() => {
     restoreUser()
-  }, [])
+  }, []) 
 
   return (
     <AuthContext.Provider value={{user, setUser}}>

@@ -4,7 +4,8 @@ import AppText from './AppText'
 import colors from '../config/colors'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 
-const ProductCard = ({image, name, desc, price, companyName, onPress, addToCart, addToCartOnPress}) => {
+const ProductCard = ({name,image, desc, price, companyName, onPress, addToCart, addToCartOnPress, ...otherPops}) => {
+
   return (
     <TouchableHighlight style={styles.card} onPress={onPress} underlayColor="rgba(0,0,0,.3)">
         <View style={styles.cardInner}>
@@ -17,7 +18,9 @@ const ProductCard = ({image, name, desc, price, companyName, onPress, addToCart,
                         />
           </TouchableOpacity>
           }
-            <Image source={image} style={styles.image} />
+            <View style={styles.image}>
+              <Image source={{uri: image}} style={{width: "100%", height: "100%"}}/>
+            </View>
             <View style={styles.details}>
                 <Text style={styles.name} numberOfLines={1}>{name}</Text>
                 <AppText numberOfLines={2} style={styles.desc}>{desc}</AppText>
@@ -86,7 +89,9 @@ const styles = StyleSheet.create({
     image: {
       width: '40%',
       height: "100%",
-      borderRadius: 10,
+      borderRadius: 15,
+      backgroundColor: colors.horizon,
+      overflow: "hidden",
     },
     name: {
       fontWeight: "bold",

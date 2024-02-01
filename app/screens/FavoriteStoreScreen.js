@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     },
     screen: {
         backgroundColor: colors.midnight,
+        paddingTop: 10,
     }
 })
 

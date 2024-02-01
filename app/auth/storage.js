@@ -6,6 +6,7 @@ const key = "authToken"
 const storeToken = async authToken => {
     try {
         await SecureStore.setItemAsync(key, authToken)
+        console.log("Auth token stored successfully");
     } catch (error) {
         console.log("Error storing auth token", error)
     } 
@@ -13,7 +14,8 @@ const storeToken = async authToken => {
 
 const getToken = async () => {
     try {
-        return await SecureStore.getItemAsync(key)
+        const token = await SecureStore.getItemAsync(key);
+        return token;
     } catch (error) {
         console.log("Error getting auth token", error)
     }
@@ -26,7 +28,8 @@ const getUser = async () => {
 
 const removeToken = async () => {
     try {
-        await SecureStore.deleteItemAsync(key)
+        await SecureStore.deleteItemAsync(key);
+        console.log("Auth token removed successfully");
     } catch (error) {
         console.log("Error removing auth token", error)
     }

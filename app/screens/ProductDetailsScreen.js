@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { View, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 import AppText from '../components/AppText';
 import colors from '../config/colors';
@@ -10,40 +11,121 @@ import Screen from '../components/Screen';
 import routes from '../navigation/routes';
 
 function ProductDetails({route, navigation}) {
+    const [cartItemAdded, setCartItemAdded] = useState([]);
+    const [favStoreAdded, setFavStoreAdded] = useState([]);
     const product = route.params;
     
-    const handleAddToCart = productID =>{
-        console.log("add to cart pressed", productID)
-    }
+    useEffect(() => {
+        fetchFavStores()
+        fetchCartItems();
+    }, []);
+    
+    const fetchCartItems = async () => {
+        try {
+            const existingCartItems = await AsyncStorage.getItem('cartItems');
+            const parsedExistingCartItems = JSON.parse(existingCartItems) || [];
+            setCartItemAdded(parsedExistingCartItems);
+        } catch (error) {
+            console.error('Error fetching cart items:', error);
+        }
+    };
+
+    const fetchFavStores = async () => {
+        try {
+          const existingStores = await AsyncStorage.getItem('favStores');
+          const parsedExistingStores = JSON.parse(existingStores) || [];
+          setFavStoreAdded(parsedExistingStores);
+        } catch (error) {
+          console.error('Error fetching fav stores:', error);
+        }
+      };
+
+    const handleAddToCart = async (productID) =>{
+        try {
+            // Retrieve existing cart items from AsyncStorage
+            const existingCartItems = await AsyncStorage.getItem('cartItems');
+            const parsedExistingCartItems = JSON.parse(existingCartItems) || [];
+
+            // Check if the product is already in the cart
+            const isProductInCart = parsedExistingCartItems.some(
+                (item) => item.id === productID
+            );
+
+            if (isProductInCart) {
+                // Product is already in the cart
+                Alert.alert("Product is already in the cart")
+                return;
+            }
+
+            // Add the new product to the cart
+            const updatedCartItems = [...parsedExistingCartItems, product];
+            setCartItemAdded(updatedCartItems)
+            await AsyncStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+            Alert.alert("Product added to cart")
+          } catch (error) {
+            console.error('Error adding product to cart:', error);
+          }
+    };
     const handleBuyNow = productID => {
         console.log("buy now", productID)
     }
     const handleAddToRadar = productID => {
         console.log("added to radar", productID)
     }
-    const handleAddToFavStores = store => {
-        console.log("added to fav stores", store)
+    const handleAddToFavStores = async (store) => {
+        try {
+            // Retrieve existing stores from AsyncStorage
+            const existingStores = await AsyncStorage.getItem('favStores');
+            const parsedExistingStores = JSON.parse(existingStores) || [];
+        
+            // Check if the store is already in the list
+            const isStoreInList = parsedExistingStores.some(
+              (item) => item === store
+            );
+        
+            if (isStoreInList) {
+              // Store is already in the list
+              Alert.alert('Store is already in the list');
+              return;
+            }
+
+            // const newStore = { id: generateUniqueId(), name: store };
+
+            // Add the new store to the list
+            const updatedStores = [...parsedExistingStores, store];
+            setFavStoreAdded(updatedStores);
+            await AsyncStorage.setItem('favStores', JSON.stringify(updatedStores));
+            Alert.alert('Store added to list');
+
+        } catch (error) {
+            console.error('Error adding store to list:', error);
+        }
     }
+    const generateUniqueId = () => {
+        return new Date().getTime();
+    };
+
+
     const handleShare = id => {
         navigation.navigate(routes.SHARE_SCREEN, id)
     }
- 
   return (
     <Screen style={styles.screen}>
-
         <View style={styles.container}>
-            <Image source={product.image} style={styles.image}/>
+            <View style={styles.image}>
+                <Image source={{uri: product.images[0].image}} style={{width: "100%", height: "100%"}}/>
+            </View>
             <View style={styles.detailsContainer}>
                 <View style={styles.details}>
-                    <AppText style={styles.name} numberOfLines={1}>{product.name}</AppText>
+                    <AppText style={styles.name} numberOfLines={1}>{product.title}</AppText>
                     <AppText style={styles.price}>${product.price}</AppText>
                 </View>
-                {product.store && 
+                {product.stores[0] && 
                     <View style={styles.storeWrapper}>
-                        <AppText style={styles.store}>{product.store}</AppText>
+                        <AppText style={styles.store}>{product.stores[0]}</AppText>
                         <TouchableOpacity 
                             style={{flexDirection: "row", alignItems: "center"}} 
-                            onPress={()=> handleAddToFavStores(product.store)}
+                            onPress={()=> handleAddToFavStores(product.stores[0])}
                         >
                             <AppText style={styles.heart}>Add to Favorite Stores</AppText>
                             <Icon
@@ -87,9 +169,8 @@ function ProductDetails({route, navigation}) {
                 </View>
                 <Accordion 
                     title="Product Information"
-                    content={product.desc}
+                    content={product.description}
                 />
-               
             </View>
         </View>
     </Screen>
@@ -147,6 +228,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: "35%",
         borderRadius: 5,
+        overflow: "hidden",
+        backgroundColor: colors.horizon,
     },
     name: {
         fontSize: 20,
@@ -173,6 +256,7 @@ const styles = StyleSheet.create({
     },
     screen: {
         backgroundColor: colors.midnight,
+        paddingTop: 0,
     },
     share: {
         borderRadius: 5,

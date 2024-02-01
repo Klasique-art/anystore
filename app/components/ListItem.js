@@ -4,14 +4,14 @@ import colors from '../config/colors'
 import Icon from './Icon' 
 import AppText from './AppText'
 
-const ListItem = ({IconComponent, title, subtitle, onPress, Chevron}) => {
+const ListItem = ({IconComponent, title, subtitle, onPress, Chevron, style}) => {
   return (
     <TouchableHighlight onPress={onPress} underlayColor={colors.lighter} >
         <View style={styles.listWrapper}>
             {IconComponent}
             <View style={styles.container}>
                 <AppText style={{color: colors.amberGlow, fontWeight: "bold"}} numberOfLines={1}>{title}</AppText>
-                <Text style={{color: colors.misty, fontWeight: "bold"}}>{subtitle}</Text>
+                <Text style={[{color: colors.misty, fontWeight: "bold"}, style]}>{subtitle}</Text>
             </View>
             {Chevron && <Icon name="chevron-right" size={35} color={colors.amberGlowLight} />}
         </View>

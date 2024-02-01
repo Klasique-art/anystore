@@ -1,10 +1,12 @@
-import { View, StyleSheet, Image, TouchableHighlight, Alert } from 'react-native'
+import { View, StyleSheet, TouchableHighlight, Alert } from 'react-native'
 import React from 'react'
+import {MaterialCommunityIcons} from '@expo/vector-icons'
+
 import AppText from './AppText'
 import colors from '../config/colors'
 import AppButton from './AppButton'
 
-const ProductCard = ({image, shopName, onPress, removeFavorite}) => {
+const ProductCard = ({shopName, onPress, removeFavorite}) => {
     
     const removeAlert = () => {
         Alert.alert(
@@ -22,7 +24,9 @@ const ProductCard = ({image, shopName, onPress, removeFavorite}) => {
         <View style={styles.storeContainer}>
             <TouchableHighlight style={styles.card} onPress={onPress} underlayColor="rgba(0,0,0,.3)">
                 <View style={styles.cardInner}>
-                    <Image source={image} style={styles.image} />
+                    <View style={styles.image}>
+                        <MaterialCommunityIcons name="store" size={80} color={colors.midnight} />
+                    </View>
                     <View style={styles.details}>
                         <AppText style={styles.name} numberOfLines={1}>{shopName}</AppText>
                         <AppButton title="Remove" onPress={removeAlert} color={colors.black} />
@@ -65,7 +69,11 @@ const styles = StyleSheet.create({
     image: {
         width: "100%",
         height: "60%",
-        borderRadius: 15,
+        borderRadius: 25,
+        backgroundColor: colors.amberGlowLight,
+        overflow: "hidden",
+        justifyContent: "center",
+        alignItems: "center",
     },
     details: {
         width: "100%",

@@ -3,22 +3,42 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React, { useState,} from 'react'
 import { TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
 
 import ActivityIndicator from '../components/ActivityIndicator'
-import ProductsFetchData from '../backend/ProductsFetchData'
 import Screen from '../components/Screen'
 import colors from '../config/colors'
 import CodeSearch from '../components/CodeSearch'
 import SearchInput from '../components/SearchInput'
 import routes from '../navigation/routes'
 import CardProducts from '../components/CardProducts'
+import ListItem from '../components/ListItem'
 
 const ProductsScreen = () => {
     const [searchText, setSearchText] = useState("")
+    const [products, setProducts] = useState([])
+    const [resultNotFound, setResultNotFound] = useState(false)
+    const [loading, setLoading] = useState(false)
     const navigation = useNavigation()
 
     const handleSearch = () => {
-        console.log("searching for: ", searchText)
+        setLoading(true)
+        axios.get(`https://storeapi-961b4e11e016.herokuapp.com/api/products/?search=${searchText}`)
+            .then(res => {
+                const result = res.data
+                setProducts(result)
+                setLoading(false)
+
+                if (result.length === 0) {
+                    setResultNotFound(true)
+                } else {
+                    setResultNotFound(false)
+                }
+                
+            })
+            .catch(err => {
+                console.log("error getting products",err)
+            })
     }
     const navBarToggle = () => {
         console.log("toggle navbar")
@@ -32,7 +52,6 @@ const ProductsScreen = () => {
 
     return (
         <Screen style={{ backgroundColor: colors.midnight }}>
-            <ProductsFetchData />
             {/* top bar */}
             <View style={styles.topBarContainer}>
                 <View style={styles.navbar}>
@@ -52,16 +71,32 @@ const ProductsScreen = () => {
                     placeholder="Search by Keyword"
                     placeholderTextColor={colors.misty}
                     onChangeText={text => setSearchText(text)}
-                    onPress={handleSearch}
+                    searchPress={handleSearch}
                 />
                 <CodeSearch />
             </View>
             {/* end of top bar */}
             {/* main body */}
             <View style={styles.mainBody}>
-                {/* <ActivityIndicator 
-                    visible={true}/> */}
-                <CardProducts />
+                <ActivityIndicator visible={loading} />
+                <CardProducts 
+                    productData={products}
+                />
+                {resultNotFound === true && 
+                <View style={{
+                    width: '100%',
+                    height: "100%",
+                    justifyContent: 'center',
+                }}>
+                    <ListItem
+                        title="No result found"
+                        subtitle="Try searching with another keyword"
+                        style={{color: colors.midnight, fontSize: 18, fontWeight: "bold"}}
+                        IconComponent={
+                            <MaterialCommunityIcons name="alert-circle" size={35} color={colors.punch} />
+                        }
+                    />
+                </View>}
             </View>
             {/* end of main body */}
         </Screen>

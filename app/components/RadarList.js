@@ -12,7 +12,7 @@ const initialRadarData = [
       desc: "this is an apple watch",
       price: "100",
       companyName: "apple",
-      image: require("../assets/apple.png"),
+      image: "https://picsum.photos/200/300",
   },
   {
       id: 2,
@@ -20,7 +20,7 @@ const initialRadarData = [
       desc: "this is a samsung watch",
       price: "100",
       companyName: "samsung",
-      image: require("../assets/apple.png"),
+      image: "https://picsum.photos/200/300",
   },
   {
       id: 3,
@@ -28,7 +28,7 @@ const initialRadarData = [
       desc: "this is an apple watch",
       price: "100",
       companyName: "mouse",
-      image: require("../assets/apple.png"),
+      image: "https://picsum.photos/200/300",
   },
 ]
 
@@ -42,13 +42,13 @@ function RadarList(props) {
     setRadarData(newRadarData) 
   }
   const handleRadarItemPress = item => {
-    navigation.navigate(routes.PRODUCT_DETAILS, item)
+    // navigation.navigate(routes.PRODUCT_DETAILS, item)
     
   }
   return (
     <FlatList 
         data={radarData}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item.id.toString()} 
         renderItem={({item})=> <CartItem 
                                     companyName={item.companyName}
                                     desc={item.desc}

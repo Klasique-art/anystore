@@ -34,7 +34,6 @@ const StoreNavigator = () => {
             component={StoreScreen}
             options={{ 
                 headerShown: true,
-                headerTitle: 'Store',
              }}
         />
         <Stack.Screen
@@ -42,7 +41,6 @@ const StoreNavigator = () => {
             component={ProductDetails}
             options={{ 
                 headerShown: true,
-                headerTitle: 'Product Details',
              }}
         />
     </Stack.Navigator>

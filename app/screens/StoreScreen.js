@@ -1,52 +1,17 @@
-import React from 'react';
-import { View, StyleSheet} from 'react-native';
+import React, {useLayoutEffect} from 'react';
+import { View, StyleSheet, TouchableWithoutFeedback, Keyboard} from 'react-native';
 
 import colors from '../config/colors';
-import SearchInput from '../components/SearchInput';
 import Screen from '../components/Screen';
 import StoreList from '../components/StoreList';
 
-const appleStoreProductData = [
-    {                                                                                                                          
-      id: 1,
-      name: "Apple",
-      price: "10,000.99",
-      desc: "This is a red apple",
-      image: require("../assets/apple.png"), 
-      store: "Apple Store",
-    },
-    {
-      id: 2,
-      name: "Banana",
-      price: "2.99",
-      desc: "This is a red banana",
-      image: require("../assets/apple.png"),
-      store: "Apple Store",
-    },
-    {
-      id: 3,                                                     
-      name: "Orange",
-      price: "3.99",
-      desc: "This is a red orange",
-      image: require("../assets/apple.png"),
-      store: "Apple Store",
-    },
-    {
-      id: 4,
-      name: "Pineapple",
-      price: "4.99",
-      desc: "This is a red pineapple",
-      image: require("../assets/apple.png"),
-      store: "Apple Store",
-    },
-  ]
 const walmartStoreProductData = [
     {                                                                                                                          
       id: 100,
       name: "walmart something",
       price: "10,000.99",
       desc: "This is a red apple",
-      image: require("../assets/apple.png"), 
+      image: "https://picsum.photos/200/300", 
       store: "Walmart Store",
     },
     {
@@ -54,7 +19,7 @@ const walmartStoreProductData = [
       name: "Banana 2",
       price: "2.99",
       desc: "This is a red banana",
-      image: require("../assets/apple.png"),
+      image: "https://picsum.photos/200/300",
       store: "Walmart Store",
     },
     {
@@ -62,7 +27,7 @@ const walmartStoreProductData = [
       name: "Orange 3",
       price: "3.99",
       desc: "This is a red orange",
-      image: require("../assets/apple.png"),
+      image: "https://picsum.photos/200/300",
       store: "Walmart Store",
     },
     {
@@ -70,26 +35,31 @@ const walmartStoreProductData = [
       name: "Pineapple 4",
       price: "4.99",
       desc: "This is a red pineapple",
-      image: require("../assets/apple.png"),
+      image: "https://picsum.photos/200/300",
       store: "Walmart Store",
     },
   ]
 
-function StoreScreen() {
-    
+function StoreScreen({route, navigation}) {
+  const { shopName } = route.params;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: shopName, 
+    });
+  }, [navigation, shopName]);
+
   return (
     <Screen style={styles.screen}>
-        <View style={styles.header}>
-            <SearchInput 
-                placeholder="Search within this Store"  
-                placeholderTextColor={colors.misty}
-            />
-        </View>
+      <TouchableWithoutFeedback
+        onPress={() => Keyboard.dismiss()}
+      >
         <View style={styles.container}>
            <StoreList 
             productData={walmartStoreProductData}
            />
         </View>
+      </TouchableWithoutFeedback>
     </Screen>
   );
 }
@@ -98,9 +68,7 @@ const styles = StyleSheet.create({
   container: {
         padding: 10,
   },
-    header: {
-        padding: 10,
-    },
+    
     screen: {
         backgroundColor: colors.midnight,
     }

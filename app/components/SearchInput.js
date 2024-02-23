@@ -12,9 +12,9 @@ const SearchInput = ({iconColor = colors.amberGlow, searchPress, ...otherProps})
       {searchPress &&<TouchableHighlight onPress={searchPress}>
         <MaterialCommunityIcons name='store-search' size={30} color={iconColor} />
       </TouchableHighlight> }
-       {searchPress && <TouchableHighlight onPress={searchPress} style={styles.mic}>
+       {/* {searchPress && <TouchableHighlight onPress={searchPress} style={styles.mic}>
         <MaterialCommunityIcons name='microphone' size={15} color={iconColor} />
-      </TouchableHighlight>}
+      </TouchableHighlight>} */}
     </View>
   )
 }

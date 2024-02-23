@@ -52,7 +52,6 @@ const CardList = () => {
     );
   }
 
-  
   return (
     <>
     <View style={styles.headBox}>
@@ -68,7 +67,7 @@ const CardList = () => {
         <CartItem
           companyName={item.stores[0]}
           desc={item.description}
-          image={item.image}
+          image={item.images[0].image}
           name={item.title}
           onPress={() => handleCartItemPress(item)}
           price={item.price}

@@ -6,7 +6,7 @@ import Screen from '../components/Screen'
 import colors from '../config/colors'
 import SearchInput from '../components/SearchInput'
 
-const FavoriteStoreScreen = () => {
+const FavoriteStoreScreen = () => { 
   return (
     <Screen style={styles.screen}>
         <View style={styles.headBox}>

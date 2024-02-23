@@ -89,8 +89,6 @@ function ProductDetails({route, navigation}) {
               return;
             }
 
-            // const newStore = { id: generateUniqueId(), name: store };
-
             // Add the new store to the list
             const updatedStores = [...parsedExistingStores, store];
             setFavStoreAdded(updatedStores);
@@ -101,10 +99,6 @@ function ProductDetails({route, navigation}) {
             console.error('Error adding store to list:', error);
         }
     }
-    const generateUniqueId = () => {
-        return new Date().getTime();
-    };
-
 
     const handleShare = id => {
         navigation.navigate(routes.SHARE_SCREEN, id)

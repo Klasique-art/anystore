@@ -9,7 +9,6 @@ const CartScreen = () => {
 
   return (
     <Screen style={styles.screen}>
-        
         <View style={{paddingBottom: 150, height: "100%"}}>
             <CartList/>
         </View>

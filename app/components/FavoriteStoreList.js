@@ -35,7 +35,7 @@ const FavoriteStoreList = () => {
             console.error('Error removing favorite store:', error);
         }
     };
-    console.log(favStore)
+
     return (
         <FlatList 
             data={favStore}
@@ -44,7 +44,7 @@ const FavoriteStoreList = () => {
                 <FavoriteCard 
                     shopName={item}
                     onPress={() => {
-                        navigation.navigate("Store", item)
+                        navigation.navigate("Store", { shopName: item })
                     }}
                     removeFavorite={() => handleFavDelete(item)}
                 />
@@ -57,6 +57,5 @@ const FavoriteStoreList = () => {
         />
     );
 };
-
 
 export default FavoriteStoreList;

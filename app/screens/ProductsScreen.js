@@ -19,15 +19,21 @@ const ProductsScreen = () => {
     const [products, setProducts] = useState([])
     const [resultNotFound, setResultNotFound] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [productLoaded, setProductLoaded] = useState(true)
     const navigation = useNavigation()
 
     const handleSearch = () => {
         setLoading(true)
-        axios.get(`https://storeapi-961b4e11e016.herokuapp.com/api/products/?search=${searchText}`)
+        setProductLoaded(true)
+        
+        axios.get(`https://anystore-13b784c090db.herokuapp.com/api/products/?search=${searchText}`, {
+            timeout: 10000
+        })
             .then(res => {
                 const result = res.data
                 setProducts(result)
                 setLoading(false)
+                setProductLoaded(true)
 
                 if (result.length === 0) {
                     setResultNotFound(true)
@@ -38,6 +44,8 @@ const ProductsScreen = () => {
             })
             .catch(err => {
                 console.log("error getting products",err)
+                setLoading(false)
+                setProductLoaded(false)
             })
     }
     const navBarToggle = () => {
@@ -68,7 +76,7 @@ const ProductsScreen = () => {
                 <SearchInput
                     autoCapitalize="none"
                     autoCorrect={false}
-                    placeholder="Search by Keyword"
+                    placeholder="Search products by Keyword"
                     placeholderTextColor={colors.misty}
                     onChangeText={text => setSearchText(text)}
                     searchPress={handleSearch}
@@ -91,6 +99,21 @@ const ProductsScreen = () => {
                     <ListItem
                         title="No result found"
                         subtitle="Try searching with another keyword"
+                        style={{color: colors.midnight, fontSize: 18, fontWeight: "bold"}}
+                        IconComponent={
+                            <MaterialCommunityIcons name="alert-circle" size={35} color={colors.punch} />
+                        }
+                    />
+                </View>}
+                {productLoaded === false && 
+                <View style={{
+                    width: '100%',
+                    height: "100%",
+                    justifyContent: 'center',
+                }}>
+                    <ListItem
+                        title="No product loaded"
+                        subtitle="There was an error loading products, please try again later."
                         style={{color: colors.midnight, fontSize: 18, fontWeight: "bold"}}
                         IconComponent={
                             <MaterialCommunityIcons name="alert-circle" size={35} color={colors.punch} />

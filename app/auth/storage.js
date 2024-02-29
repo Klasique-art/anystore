@@ -25,7 +25,7 @@ const getUser = async () => {
     const token = await getToken()
     return (token) ? jwtDecode(token) : null
 }
-
+ 
 const removeToken = async () => {
     try {
         await SecureStore.deleteItemAsync(key);

@@ -5,6 +5,7 @@ import ProductDetails from '../screens/ProductDetailsScreen'
 import colors from '../config/colors'
 import ShareScreen from '../screens/ShareScreen'
 import BarcodeScreen from '../screens/BarcodeScreen'
+import ShareTitleScreen from '../screens/ShareTitleScreen'
 
 const Stack = createStackNavigator()
 
@@ -41,6 +42,13 @@ const ProductNavigator = () => {
             component={ShareScreen}
             options={{
                 headerTitle: "Share",
+            }}
+        />
+        <Stack.Screen
+            name='ShareTitleScreen'
+            component={ShareTitleScreen}
+            options={{
+                headerTitle: "Share Title",
             }}
         />
         <Stack.Screen 

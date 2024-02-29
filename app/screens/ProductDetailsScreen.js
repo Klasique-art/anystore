@@ -100,8 +100,8 @@ function ProductDetails({route, navigation}) {
         }
     }
 
-    const handleShare = id => {
-        navigation.navigate(routes.SHARE_SCREEN, id)
+    const handleShare = product => {
+        navigation.navigate(routes.SHARE_SCREEN, product)
     }
   return (
     <Screen style={styles.screen}>
@@ -146,13 +146,13 @@ function ProductDetails({route, navigation}) {
                     />
                 </View>
                 <View style={styles.radarShareWrapper}>
-                    <AppButton 
+                    {/* <AppButton 
                         title="Add to Radar"
                         width='70%'
                         onPress={()=> handleAddToRadar(product.id)}
                         style={styles.radar}
-                    />
-                    <TouchableOpacity style={styles.share} onPress={()=> handleShare(product.id)}>
+                    /> */}
+                    <TouchableOpacity style={styles.share} onPress={()=> handleShare(product)}>
                         <Icon 
                             name="share"
                             size={30}

@@ -9,7 +9,6 @@ import OfflineNotice from './app/components/OfflineNotice';
 import AuthNavigation from './app/navigation/AuthNavigation';
 import AuthContext from './app/auth/context';
 import authStorage from './app/auth/storage';
-import socket from './app/api/socket';
 
 export default function App() {
   const [user, setUser] = useState()

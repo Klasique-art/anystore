@@ -4,9 +4,11 @@ import { View, StyleSheet } from 'react-native';
 import colors from '../config/colors';
 import Screen from '../components/Screen';
 
-function FriendlyScreen(props) {
+function FriendlyScreen({route}) {
+  console.log(route.params)
   return (
     <Screen style={styles.screen}>
+
     </Screen>
   );
 }

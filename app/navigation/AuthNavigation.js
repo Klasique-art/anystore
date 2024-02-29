@@ -5,6 +5,7 @@ import LoginScreen from '../screens/LoginScreen'
 import SignUpScreen from '../screens/SignUpScreen'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen'
+import SignupVerifyScreen from '../screens/SignupVerifyScreen'
 import colors from '../config/colors'
 
 const Stack = createStackNavigator()
@@ -26,6 +27,15 @@ const AuthNavigation = () => {
             name='SignUp' 
             component={SignUpScreen}
             options={{headerShown: false}}
+        />
+        <Stack.Screen 
+            name='SignupVerify' 
+            component={SignupVerifyScreen}
+            options={{
+                headerStyle: {backgroundColor: colors.horizon},
+                headerTintColor: colors.amberGlow,
+                title: 'Email verification'
+            }}
         />
         <Stack.Screen 
             name='ForgotPassword' 

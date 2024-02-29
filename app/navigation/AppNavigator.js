@@ -34,7 +34,7 @@ const AppNavigator = () => {
             }}
             
         />
-        <Tab.Screen 
+        {/* <Tab.Screen 
             name='Radar' 
             component={RadarNavigation} 
             options={{
@@ -43,7 +43,7 @@ const AppNavigator = () => {
                 <MaterialCommunityIcons name='radar' color={color} size={size}/>
               ),
             }}
-        />
+        /> */}
         <Tab.Screen 
             name='Crit' 
             component={FriendlyScreen} 

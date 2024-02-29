@@ -1,84 +1,110 @@
-import React from 'react';
-import { View, StyleSheet, FlatList, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import axios from 'axios';
 
 import colors from '../config/colors';
-import ListItem from '../components/ListItem';
 import Screen from '../components/Screen';
-import SearchInput from '../components/SearchInput'
+import SearchInput from '../components/SearchInput';
+import useAuth from '../auth/useAuth';
+import SearchNotFound from '../components/SearchNotFound';
+import AppText from '../components/AppText';
 
-userData = 
-    [
-        {
-          id: 1,
-          title: "John Doe",
-          subtitle: "johndoe",
-          image: require("../assets/apple.png"),
-        },
-        {
-          id: 2,
-          title: "Jane Doe",
-          subtitle: "janedoe",
-          image: require("../assets/apple.png"),
-        },
-        {
-          id: 3,
-          title: "John Smith",
-          subtitle: "johnsmith",
-          image: require("../assets/apple.png"),
-        },
-      ]
+const ShareScreen = ({navigation, route}) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const product = route.params;
+  const { user } = useAuth();
 
-function ShareScreen(props) {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://pacific-sierra-04938-5becb39a6e4f.herokuapp.com/api/search/?query=${searchQuery}`);
+
+        // filter out the current user from the search results
+        const filteredResults = response.data.filter((result) => result !== user.username);
+        setSearchResults(filteredResults);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+      }
+    };
+
+    fetchData();
+  }, [searchQuery]);
+
   return (
     <Screen style={styles.screen}>
-      <View style={styles.header}>
-        <SearchInput 
-            placeholder="Search User"
+      <TouchableWithoutFeedback
+        onPress={() => {
+          console.log('dismissed keyboard');
+          Keyboard.dismiss();
+        }}
+      >
+        <>
+        <View style={styles.header}>
+          <SearchInput
+            placeholder="Search user by name"
             placeholderTextColor={colors.misty}
-            searchPress={()=> console.log("search pressed")}
-        />
-      </View>
-      <View style={styles.container}>
-        <FlatList
-          data={userData}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <ListItem
-              title={item.title}
-              IconComponent={<Image 
-                                backgroundColor={colors.mistyLight} 
-                                name="account" 
-                                source={item.image}
-                                style={{height: 50, width: 50, borderRadius: 25}}
-                              />}
-              subtitle={item.subtitle}
-              onPress={()=> console.log("pressed", item.id)}
-            />
-          )}
-          ItemSeparatorComponent={() => <View style={styles.seperator} />}
-        />
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+          />
         </View>
+        <View style={styles.container}>
+          {searchResults.length > 0 ? (
+            searchResults.map((result) => (
+              <TouchableOpacity 
+                key={result} 
+                onPress={() => navigation.navigate('ShareTitleScreen', { username: result , product: product})}
+                style={styles.item}
+                activeOpacity={0.6}
+              >
+                <View style={styles.itemInner}>
+                  <AppText style={styles.text}>{result}</AppText>
+                </View>
+              </TouchableOpacity>
+            )) 
+          ) : (
+            <SearchNotFound />
+          )}
+        </View>
+        </>
+      </TouchableWithoutFeedback>
     </Screen>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.midnight,
     padding: 10,
   },
+  item: {
+    width: "50%",
+    height: 50,
+    backgroundColor: colors.amberGlow,
+    marginVertical: 10,
+    borderRadius: 5,
+  },
+  itemInner: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   screen: {
     backgroundColor: colors.midnight,
     padding: 10,
+    paddingTop: 0,
   },
-    header: {
-        backgroundColor: colors.midnight,
-        padding: 10,
-    },
-    seperator: {
-        width: "100%",
-        height: 10,
-    },
+  header: {
+    backgroundColor: colors.midnight,
+    padding: 10,
+  },
+  text: {
+    color: colors.midnight,
+    fontSize: 25,
+    textTransform: "capitalize",
+    fontWeight: "700",
+    letterSpacing: 1,
+  },
 });
 
 export default ShareScreen;

@@ -11,9 +11,8 @@ import usersApi from '../api/users'
 import authApi from '../api/auth'
 import useAuth from '../auth/useAuth';
 
-
 const validationSchema = Yup.object().shape({
-    userName: Yup.string().required("Enter your name").label("Username").min(3, "Name too short").max(40, "Name too long"),
+    username: Yup.string().required("Enter your name").label("Username").min(3, "Name too short").max(40, "Name too long"),
     email: Yup.string().required("Please enter your email address").email().label("Email"),
     password: Yup.string().required("You need to create a password").min(8).label("Password").matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Must contain at least one uppercase, one lowercase, one number and one symbol"),
     confirmPassword: Yup.string().required("Confirm your password").label("Confirm Password").oneOf([Yup.ref('password')], 'Passwords must match')
@@ -26,27 +25,10 @@ const SignUpScreen = ({navigation}) => {
     const [loading, setLoading] = useState(false)
     const auth = useAuth()
 
-    const handleSubmit = async (userInfo) => {
-        setLoading(true)
-       const result = await usersApi.register(userInfo)
-        setLoading(false)
-
-       if(!result.ok) {
-        if(result.data) {
-            setError(result.data.message);
-        }
-        else {
-            setError("An unexpected error occurred.")
-            console.log(result)
-        }
-        return;
-       }
-       const response = await authApi.login(
-                                            userInfo.email, 
-                                            userInfo.password)
-        auth.logIn(response.data.token)
+    const handleSubmit = (userInfo) => {
+       usersApi.register(userInfo)
+       navigation.navigate("SignupVerify", {userInfo})
     }
-    
 
   return (
     <Screen style={{backgroundColor: colors.midnight}}>
@@ -62,14 +44,14 @@ const SignUpScreen = ({navigation}) => {
                 >
                     <ActivityIndicator animating={loading} size="large" />
                     <AppForm 
-                        initialValues={{ userName: "", email: "", password: "", confirmPassword: ""}}
+                        initialValues={{ username: "", email: "", password: "", confirmPassword: ""}}
                         onSubmit={handleSubmit}
                         validationSchema={validationSchema}
                     >
                         <ErrorMessage error={error} visible={error} />
 
                         <AppFormField
-                            name="userName"
+                            name="username"
                             icon="account" 
                             placeholder="Username" 
                             placeholderTextColor={colors.white}
@@ -108,7 +90,7 @@ const SignUpScreen = ({navigation}) => {
                             autoCapitalize="none"
                             autoCorrect={false}
                             secureTextEntry={isConfirmSecure}
-                            onPress={text => setIsConfirmSecure(!isConfirmSecure)}
+                            onPress={() => setIsConfirmSecure(!isConfirmSecure)}
                             textContentType="password"
                         />
                         <SubmitButton title="Sign up" width="90%" />

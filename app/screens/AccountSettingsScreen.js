@@ -13,7 +13,7 @@ import routes from '../navigation/routes'
 
 const AccountSettingsScreen = ({navigation}) => {
   const {user, logOut} = useAuth()
-  const [imageUri, setImageUri] = useState()
+  // const [imageUri, setImageUri] = useState()
 
 
   const logoutAlert = () => {
@@ -28,15 +28,22 @@ const AccountSettingsScreen = ({navigation}) => {
     )
 }
 
-  const selectImage = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync()
-      if (!result.canceled)
-        setImageUri(result.uri)
-    } catch (error) {
-      console.log("Error reading an image", error)
-    }
-  }
+  // const selectImage = async () => {
+  //   try {
+  //     const result = await ImagePicker.launchImageLibraryAsync(
+  //       {
+  //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //         allowsEditing: true,
+  //         aspect: [1, 1],
+  //         quality: 0.5
+  //       }
+  //     )
+  //     if (!result.canceled)
+  //       setImageUri(result.uri)
+  //   } catch (error) {
+  //     console.log("Error reading an image", error)
+  //   }
+  // }
 
   return (
     <Screen style={styles.screen}>
@@ -44,18 +51,18 @@ const AccountSettingsScreen = ({navigation}) => {
         <Text style={styles.heading}>Account Settings</Text>
       </View>
       <View style={styles.itemsContainer}>
-        <View style={{marginBottom: 20,}}>
+        {/* <View style={{marginBottom: 20,}}>
           <ImageInput 
             imageUri={imageUri} 
             onChangeImage={uri => setImageUri(uri)}
           />
-        </View>
+        </View> */}
         <View style={styles.listContainer}>
           <ListItem 
             title="Name"
-            subtitle="Klasique"
+            subtitle={user.username}
             IconComponent={<Icon name="account" size={30} color={colors.amberGlow} />}
-            onPress={()=> navigation.navigate(routes.NAME_RESET)}
+            // onPress={()=> navigation.navigate(routes.NAME_RESET)}
           />
           <ListItem 
             title="Email"
@@ -68,6 +75,12 @@ const AccountSettingsScreen = ({navigation}) => {
             subtitle="*********"
             IconComponent={<Icon name="email" size={30} color={colors.amberGlow} />}
             onPress={()=> navigation.navigate(routes.PASSWORD_RESET)}
+          />
+          <ListItem
+            title="Delete account"
+            subtitle="Delete your account permanently. This action cannot be undone."
+            IconComponent={<Icon name="delete" size={30} color={colors.amberGlow} />}
+            // onPress={()=> navigation.navigate(routes.DELETE_ACCOUNT)}
           />
         </View>
         <AppButton 

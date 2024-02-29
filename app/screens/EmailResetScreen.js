@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
 
@@ -19,28 +19,30 @@ function EmailResetScreen(props) {
     const navigation = useNavigation()
     const {user} = useAuth()
 
-    const handleChangeEmail = async ({email}) => {
+    const handleChangeEmail = async ({ email }) => {
         try {
             // Get the authentication token
             const authToken = await storage.getToken();
- 
+
             if (!authToken) {
                 setError('Authentication token not found.');
                 console.error('Authentication token not found.');
                 return;
             }
-
-            const result = await changeEmail.changeEmail(authToken, email);
-
-            if (!result.ok) {
-                setError(result.data.message);
+    
+            // Call the changeEmail function directly (no need for changeEmail.changeEmail)
+            const result = await changeEmail(authToken, email);
+    
+            // Check if the request was successful
+            if (!result || !result.ok) {
+                setError(result?.data?.message || 'An unexpected error occurred.');
                 return;
             }
-
-            // set the new email in the user object
+    
+            // Assuming your user object is mutable, you can update the email directly
             user.email = email;
-
-            // navigate to the account settings screen
+    
+            // Navigate to the account settings screen
             Alert.alert(
                 "Email Changed",
                 "Your email has been changed successfully.",
@@ -49,15 +51,19 @@ function EmailResetScreen(props) {
                 ],
                 { cancelable: false }
             );
-
+    
         } catch (error) {
             console.error('Error changing email:', error);
+            setError('An unexpected error occurred.');
         }
     };
+    
 
   return (
     <Screen style={styles.screen}>
-
+        <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+        >
         <View style={styles.container}>
             <AppForm
                 initialValues={{email: ""}}
@@ -83,6 +89,7 @@ function EmailResetScreen(props) {
                 />
             </AppForm>
         </View>
+        </TouchableWithoutFeedback>
     </Screen>
   );
 }

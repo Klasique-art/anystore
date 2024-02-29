@@ -7,10 +7,14 @@ import CartItem from './cart/CartItem';
 import routes from '../navigation/routes';
 import colors from '../config/colors';
 import SearchInput from './SearchInput';
+import SearchNotFound from './SearchNotFound';
+import ItemEmpty from './ItemEmpty';
 
 const CardList = () => {
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [resultNotFound, setResultNotFound] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -43,6 +47,24 @@ const CardList = () => {
     navigation.navigate(routes.PRODUCT_DETAILS, item);
   };
 
+  const handleSearch = (text) => {
+    setSearchQuery(text);
+
+    if(!text.trim()) {
+      setSearchQuery("");
+      setResultNotFound(false);
+      fetchCartItems();
+      return;
+    }
+    const filteredItems = cartData.filter(item => item.title.toLowerCase().includes(text.toLowerCase()) || item.stores[0].toLowerCase().includes(text.toLowerCase()) || item.description.toLowerCase().includes(text.toLowerCase()));
+
+    if(filteredItems.length) {
+      setCartData([...filteredItems]);
+    } else {
+      setResultNotFound(true);
+    }
+  }
+
   if (loading) {
     // Display a loading indicator while data is being fetched
     return (
@@ -53,35 +75,44 @@ const CardList = () => {
   }
 
   return (
-    <>
-    <View style={styles.headBox}>
+    <View style={{
+      height: "100%"
+    }}>
+    {cartData.length > 0 && <View style={styles.headBox}>
         <SearchInput 
           placeholder="Search Product" 
           placeholderTextColor={colors.amberGlow} 
+          value={searchQuery}
+          onChangeText={handleSearch}
         />
-      </View>
-    <FlatList
-      data={cartData}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
-        <CartItem
-          companyName={item.stores[0]}
-          desc={item.description}
-          image={item.images[0].image}
-          name={item.title}
-          onPress={() => handleCartItemPress(item)}
-          price={item.price}
-          delPress={() => handleDelete(item)}
-        />
-      )}
-      refreshing={loading} 
-      onRefresh={() => {
-        // This will refetch the data from AsyncStorage
-        setLoading(true);
-        fetchCartItems();
-      }}
-    />
-    </>
+      </View>}
+      {cartData.length === 0 && <ItemEmpty 
+                                  icon="cart-remove" 
+                                  text="Your cart is empty" 
+                                  subText="Add items to your cart to see them here" 
+                                />}
+    {resultNotFound ? <SearchNotFound /> : <FlatList
+        data={cartData}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <CartItem
+            companyName={item.stores[0]}
+            desc={item.description}
+            image={item.images[0].image}
+            name={item.title}
+            onPress={() => handleCartItemPress(item)}
+            price={item.price}
+            delPress={() => handleDelete(item)}
+          />
+        )}
+        refreshing={loading} 
+        onRefresh={() => {
+          // This will refetch the data from AsyncStorage
+          setLoading(true);
+          fetchCartItems();
+        }}
+      />}
+    </View>
   );
 };
 

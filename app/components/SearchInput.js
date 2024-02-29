@@ -5,10 +5,15 @@ import {MaterialCommunityIcons} from '@expo/vector-icons'
 import AppInput from './AppInput'
 import colors from '../config/colors'
 
-const SearchInput = ({iconColor = colors.amberGlow, searchPress, ...otherProps}) => {
+const SearchInput = ({iconColor = colors.amberGlow, searchPress, onChangeText, value, ...otherProps}) => {
   return (
     <View style={styles.searchBox}>
-      <TextInput {...otherProps} style={styles.textInput} />
+      <TextInput 
+        {...otherProps} 
+        style={styles.textInput} 
+        value={value}
+        onChangeText={onChangeText}
+      />
       {searchPress &&<TouchableHighlight onPress={searchPress}>
         <MaterialCommunityIcons name='store-search' size={30} color={iconColor} />
       </TouchableHighlight> }

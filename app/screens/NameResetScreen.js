@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import * as Yup from 'yup';
 
 import colors from '../config/colors';
@@ -7,20 +7,24 @@ import { AppForm, AppFormField, SubmitButton } from '../components/forms';
 import Screen from '../components/Screen';
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required().label("Name").min(3),
+    username: Yup.string().required().label("Name").min(3),
 })
 
-const NameResetScreen = () => {
+const NameResetScreen = ({navigation}) => {
+
+    const handleChangeName = (name) => {
+        console.log(name)
+    }
   return ( 
     <Screen style={styles.screen}>
         <View style={styles.container}>
             <AppForm
-            initialValues={{name: ""}}
-            onSubmit={values => console.log(values)}
-            validationSchema={validationSchema}
+                initialValues={{username: ""}}
+                onSubmit={handleChangeName}
+                validationSchema={validationSchema}
             >
             <AppFormField
-                name="name"
+                name="username"
                 autoCapitalize="none"
                 autoCorrect={false}
                 icon="account"

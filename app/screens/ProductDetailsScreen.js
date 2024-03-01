@@ -101,7 +101,7 @@ function ProductDetails({route, navigation}) {
     }
 
     const handleShare = product => {
-        navigation.navigate(routes.SHARE_SCREEN, product)
+        navigation.navigate(routes.SHARE_TITLE_SCREEN, product) 
     }
   return (
     <Screen style={styles.screen}>

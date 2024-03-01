@@ -5,41 +5,45 @@ import colors from '../config/colors';
 import AppText from '../components/AppText';
 import AppInput from '../components/AppInput';
 import AppButton from '../components/AppButton';
+import routes from '../navigation/routes';
+import chatGroup from '../api/chatGroup';
+import useAuth from '../auth/useAuth';
 
 function ShareTitleScreen({navigation, route}) {
     const [title, setTitle] = useState(''); 
-    const username = route.params.username;
-    const product = route.params.product;
+    const product = route?.params
+    const {user} = useAuth()
+    const userId = user?._id
     
+    const handleSubmit = async () => {
+      if(title.length === 0) return alert('Please enter a title');
+      const response = await chatGroup.createGroup(title, userId)
+      if(response.ok) {
+          navigation.navigate(routes.SHARE_SCREEN, {title: title, product: product, groupId: response.data._id})
+      }
+  }
   return (
     <Screen style={styles.screen}>
-        <View>
-            <AppText style={{textTransform: "capitalize", marginVertical: 10}}>Share this product to {username}</AppText>
-            <View>
-                <AppText style={{color: colors.amberGlow, marginVertical: 10}}>Enter chat title. This will create a chat with {username}</AppText>
-                <AppInput
-                    placeholder="Enter chat title"
-                    placeholderTextColor={colors.amberGlow}
-                    icon="text"
-                    autoCapitalize="none"
-                    autoCorrect={true}
-                    keyboardType="default"
-                    maxLength={25}
-                    onChangeText={text => setTitle(text)}
-                    value={title}
-                />
-                <AppButton
-                    title="Share"
-                    color={colors.amberGlowLight}
-                    onPress={() => {
-                      if(title.length === 0) return alert('Please enter a title');
-                      navigation.navigate('Crit', {username: username, title: title, product: product})
-                    }}
-                    style={{marginTop: 20, alignSelf: "center"}}
-                    width='50%'
-                />
-            </View>
-        </View>
+          <View>
+              <AppText style={{color: colors.amberGlow, marginVertical: 20}}>Enter chat group name. This will create a group where you can chat with users.</AppText>
+              <AppInput
+                  placeholder="Enter group title"
+                  placeholderTextColor={colors.amberGlow}
+                  icon="text"
+                  autoCorrect={true}
+                  keyboardType="default"
+                  maxLength={25}
+                  onChangeText={text => setTitle(text)}
+                  value={title}
+              />
+              <AppButton
+                  title="Share"
+                  color={colors.amberGlowLight}
+                  onPress={handleSubmit}
+                  style={{marginTop: 20, alignSelf: "center"}}
+                  width='50%'
+              />
+          </View>
     </Screen>
   );
 }

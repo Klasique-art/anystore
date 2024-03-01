@@ -18,7 +18,6 @@ function SignupVerifyScreen({ route }) {
   const userInfo = route.params.userInfo;
   const auth = useAuth();
   const codeInputs = Array(4).fill(0).map((_, i) => useRef(null));
-
   const handleCodeChange = (index, value) => {
     const newCodes = [...codes];
     newCodes[index] = value;
@@ -39,17 +38,14 @@ function SignupVerifyScreen({ route }) {
     }
 
   };
-  
+   
   const handleSignup = async () => {
     const isAllCodesFilled = codes.every(code => code !== '');
     if (isAllCodesFilled) {
       try {
         setLoading(true);
         // Verify the code first
-        const verifyResult = await usersApi.verifyCode({
-          code: codes.join(''),
-          email: userInfo.email,
-        });
+        const verifyResult = await usersApi.verifyCode(codes.join(''),userInfo.email);
 
         if (!verifyResult.ok) {
           console.log(verifyResult.data);
@@ -59,17 +55,17 @@ function SignupVerifyScreen({ route }) {
         }
 
         // If code verification is successful, proceed with user registration
-        const registerResult = await usersApi.register({userInfo});
+        // const registerResult = await usersApi.register(userInfo);
   
-        if (!registerResult.ok) {
-          if (registerResult.data) {
-            setError(registerResult.data.message);
-          } else {
-            setError("An unexpected error occurred during registration.");
-          }
-          setHasError(true);
-          return;
-        }
+        // if (!registerResult.ok) {
+        //   if (registerResult.data) {
+        //     setError(registerResult.data.message);
+        //   } else {
+        //     setError("An unexpected error occurred during registration.");
+        //   }
+        //   setHasError(true);
+        //   return;
+        // }
   
         // If registration is successful, log in the user
         const response = await authApi.login(userInfo.email, userInfo.password);
@@ -108,7 +104,7 @@ function SignupVerifyScreen({ route }) {
             ))}
           </View>
           <AppButton
-            title="Resend Code"
+            title="Submit Code"
             color={colors.amberGlowLight}
             width='100'
             onPress={handleSignup}

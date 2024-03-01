@@ -13,8 +13,7 @@ import routes from '../navigation/routes'
 
 const AccountSettingsScreen = ({navigation}) => {
   const {user, logOut} = useAuth()
-  // const [imageUri, setImageUri] = useState()
-
+  const [imageUri, setImageUri] = useState()
 
   const logoutAlert = () => {
     Alert.alert(
@@ -27,23 +26,6 @@ const AccountSettingsScreen = ({navigation}) => {
         { cancelable: false }
     )
 }
-
-  // const selectImage = async () => {
-  //   try {
-  //     const result = await ImagePicker.launchImageLibraryAsync(
-  //       {
-  //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //         allowsEditing: true,
-  //         aspect: [1, 1],
-  //         quality: 0.5
-  //       }
-  //     )
-  //     if (!result.canceled)
-  //       setImageUri(result.uri)
-  //   } catch (error) {
-  //     console.log("Error reading an image", error)
-  //   }
-  // }
 
   return (
     <Screen style={styles.screen}>
@@ -60,7 +42,7 @@ const AccountSettingsScreen = ({navigation}) => {
         <View style={styles.listContainer}>
           <ListItem 
             title="Name"
-            subtitle={user.username}
+            subtitle={user.username.toUpperCase()}
             IconComponent={<Icon name="account" size={30} color={colors.amberGlow} />}
             // onPress={()=> navigation.navigate(routes.NAME_RESET)}
           />

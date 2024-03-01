@@ -9,4 +9,6 @@ export default Object.freeze({
     PASSWORD_RESET: 'PasswordReset',
     EMAIL_RESET: 'EmailReset',
     FORGOT_PASSWORD: 'ForgotPassword',
+    SHARE_TITLE_SCREEN: 'ShareTitleScreen',
+    CRIT: 'Crit',
 })

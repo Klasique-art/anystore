@@ -5,13 +5,13 @@ import {MaterialCommunityIcons} from '@expo/vector-icons'
 import colors from '../config/colors'
 import appStyles from '../config/appStyles'
 
-const AppInput = ({color = colors.amberGlow, icon, size = 30,label,onPress, ...otherProps }) => {
+const AppInput = ({color = colors.amberGlow, icon, size = 30,label,onPress,style, ...otherProps }) => {
   return (
 
     <View style={styles.inputContainer}>
         {label && <Text style={styles.text}>{label}</Text>}
         <View style={styles.inputBox}>
-            <TextInput style={[appStyles.text, styles.input]} {...otherProps} />
+            <TextInput style={[appStyles.text, styles.input, style]} {...otherProps} />
             {icon && <MaterialCommunityIcons name={icon} size={size} color={color} onPress={onPress} />}
         </View>
     </View>

@@ -12,7 +12,9 @@ import AppText from '../components/AppText';
 const ShareScreen = ({navigation, route}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const product = route.params;
+  const product = route.params.product;
+  const groupId = route.params.groupId
+  const groupName = route.params.title
   const { user } = useAuth();
 
   useEffect(() => {
@@ -53,12 +55,12 @@ const ShareScreen = ({navigation, route}) => {
             searchResults.map((result) => (
               <TouchableOpacity 
                 key={result} 
-                onPress={() => navigation.navigate('ShareTitleScreen', { username: result , product: product})}
+                onPress={() => navigation.navigate('Crit', { username: result , product: product, groupId: groupId, groupName: groupName})}
                 style={styles.item}
                 activeOpacity={0.6}
               >
                 <View style={styles.itemInner}>
-                  <AppText style={styles.text}>{result}</AppText>
+                  <AppText style={styles.text}>{result}</AppText> 
                 </View>
               </TouchableOpacity>
             )) 

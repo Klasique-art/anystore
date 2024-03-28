@@ -55,7 +55,7 @@ const ShareScreen = ({navigation, route}) => {
             searchResults.map((result) => (
               <TouchableOpacity 
                 key={result} 
-                onPress={() => navigation.navigate('Crit', { username: result , product: product, groupId: groupId, groupName: groupName})}
+                onPress={() => navigation.navigate('Crit', { username: result , product: product, groupId: groupId, groupName: groupName })}
                 style={styles.item}
                 activeOpacity={0.6}
               >

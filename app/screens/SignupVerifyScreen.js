@@ -8,6 +8,7 @@ import { ErrorMessage } from '../components/forms';
 import usersApi from '../api/users';
 import authApi from '../api/auth';
 import useAuth from '../auth/useAuth';
+import AppText from '../components/AppText';
 
 function SignupVerifyScreen({ route }) {
   const [codes, setCodes] = useState(['', '', '', '']);
@@ -48,26 +49,12 @@ function SignupVerifyScreen({ route }) {
         const verifyResult = await usersApi.verifyCode(codes.join(''),userInfo.email);
 
         if (!verifyResult.ok) {
-          console.log(verifyResult.data);
           setError(verifyResult.data.message || "Code verification failed");
           setHasError(true);
           return;
         }
 
-        // If code verification is successful, proceed with user registration
-        // const registerResult = await usersApi.register(userInfo);
-  
-        // if (!registerResult.ok) {
-        //   if (registerResult.data) {
-        //     setError(registerResult.data.message);
-        //   } else {
-        //     setError("An unexpected error occurred during registration.");
-        //   }
-        //   setHasError(true);
-        //   return;
-        // }
-  
-        // If registration is successful, log in the user
+        // If code verification is successful, proceed with user login
         const response = await authApi.login(userInfo.email, userInfo.password);
         auth.logIn(response.data.token);
   
@@ -91,24 +78,27 @@ function SignupVerifyScreen({ route }) {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <>
           <ErrorMessage error={error} visible={hasError} />
-          <View style={styles.codeContainer}>
-            {codes.map((code, index) => (
-              <TextInput
-                key={index}
-                ref={codeInputs[index]}
-                style={styles.codeInput}
-                maxLength={1}
-                value={code}
-                onChangeText={value => handleCodeChange(index, value)}
-              />
-            ))}
+          <View>
+            <AppText style={{color: colors.amberGlow, marginVertical: 20}}>Enter the 4-digit code sent to your email {userInfo.email}</AppText>
+            <View style={styles.codeContainer}>
+              {codes.map((code, index) => (
+                <TextInput
+                  key={index}
+                  ref={codeInputs[index]}
+                  style={styles.codeInput}
+                  maxLength={1}
+                  value={code}
+                  onChangeText={value => handleCodeChange(index, value)}
+                />
+              ))}
+            </View>
+            <AppButton
+              title="Submit Code"
+              color={colors.amberGlowLight}
+              width='100'
+              onPress={handleSignup}
+            />
           </View>
-          <AppButton
-            title="Submit Code"
-            color={colors.amberGlowLight}
-            width='100'
-            onPress={handleSignup}
-          />
         </>
       </TouchableWithoutFeedback>
     </Screen>

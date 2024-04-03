@@ -54,7 +54,7 @@ function EmailResetScreen(props) {
     
         } catch (error) {
             console.error('Error changing email:', error);
-            setError('An unexpected error occurred.');
+            setError('An unexpected error occurred.'); 
         }
     };
     

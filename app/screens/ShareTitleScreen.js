@@ -21,7 +21,7 @@ function ShareTitleScreen({navigation, route}) {
       if(response.ok) {
           navigation.navigate(routes.SHARE_SCREEN, {title: title, product: product, groupId: response.data._id})
       }
-  }
+    }
   return (
     <Screen style={styles.screen}>
           <View>

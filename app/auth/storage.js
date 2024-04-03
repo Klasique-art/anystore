@@ -14,7 +14,7 @@ const storeToken = async authToken => {
 
 const getToken = async () => {
     try {
-        const token = await SecureStore.getItemAsync(key);
+        const token = await SecureStore.getItemAsync(key); 
         return token;
     } catch (error) {
         console.log("Error getting auth token", error)

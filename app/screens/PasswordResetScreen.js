@@ -6,7 +6,7 @@ import {AppForm, AppFormField, SubmitButton, ErrorMessage} from '../components/f
 import colors from '../config/colors'
 import Screen from '../components/Screen'
 import resetPassword from '../api/changePassword'
-import storage from '../auth/storage'
+import storage from '../auth/storage' 
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string().required("Enter your previous password").min(8).label("Password").matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, "Must contain at least one uppercase, one lowercase, one number and one symbol"),

@@ -6,6 +6,8 @@ import SignUpScreen from '../screens/SignUpScreen'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen'
 import SignupVerifyScreen from '../screens/SignupVerifyScreen'
+import PasswordResetVerifyScreen from '../screens/PasswordResetVerifyScreen'
+import NewPasswordScreen from '../screens/NewPasswordScreen'
 import colors from '../config/colors'
 
 const Stack = createStackNavigator()
@@ -43,7 +45,23 @@ const AuthNavigation = () => {
             options={{
                 headerStyle: {backgroundColor: colors.horizon},
                 headerTintColor: colors.amberGlow,
-                title: 'Forgot Password'
+                title: 'Password Reset'
+            }}
+        />
+        <Stack.Screen 
+            name='PasswordResetVerify' 
+            component={PasswordResetVerifyScreen}
+            options={{
+                headerStyle: {backgroundColor: colors.horizon},
+                headerTintColor: colors.amberGlow,
+                title: 'Password Reset Verification'
+            }}
+        />
+        <Stack.Screen 
+            name='NewPassword' 
+            component={NewPasswordScreen}
+            options={{
+                headerShown: false
             }}
         />
     </Stack.Navigator>

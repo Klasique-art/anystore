@@ -1,3 +1,4 @@
+import React,{useEffect, useState} from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
@@ -10,6 +11,7 @@ import FriendlyScreen from '../screens/FriendlyScreen'
 const Tab = createBottomTabNavigator()
 
 const AppNavigator = () => {
+
   return (
    <Tab.Navigator
         tabBarOptions={{
@@ -34,7 +36,7 @@ const AppNavigator = () => {
             }}
             
         />
-        {/* <Tab.Screen 
+        <Tab.Screen 
             name='Radar' 
             component={RadarNavigation} 
             options={{
@@ -43,7 +45,7 @@ const AppNavigator = () => {
                 <MaterialCommunityIcons name='radar' color={color} size={size}/>
               ),
             }}
-        /> */}
+        />
         <Tab.Screen 
             name='Crit' 
             component={FriendlyScreen} 

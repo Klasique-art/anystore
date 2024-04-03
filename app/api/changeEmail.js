@@ -6,4 +6,4 @@ const changeEmail = (authToken, newEmail) => client.post('/change-email', { newE
     }
 });
 
-export default changeEmail;
+export default changeEmail; 

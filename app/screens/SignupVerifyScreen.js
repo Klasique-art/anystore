@@ -113,10 +113,11 @@ const styles = StyleSheet.create({
   },
   codeContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 230,
-    marginBottom: 50,
-    paddingTop: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 20,
+    width: "100%",
     height: 150,
   },
   codeInput: {

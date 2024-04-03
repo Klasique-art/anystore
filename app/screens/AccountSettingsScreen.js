@@ -10,10 +10,14 @@ import Icon from '../components/Icon'
 import AppButton from '../components/AppButton'
 import ImageInput from '../components/ImageInput'
 import routes from '../navigation/routes'
+import deleteAccount from '../api/deleteAccount'
+import storage from '../auth/storage'
 
 const AccountSettingsScreen = ({navigation}) => {
   const {user, logOut} = useAuth()
   const [imageUri, setImageUri] = useState()
+
+  const {email} = user;
 
   const logoutAlert = () => {
     Alert.alert(
@@ -23,9 +27,35 @@ const AccountSettingsScreen = ({navigation}) => {
             { text: "No" },
             { text: "Yes", onPress: () => logOut() },
         ],
-        { cancelable: false }
+        { cancelable: true }
     )
 }
+
+  const performDeleteAccount = async () => {
+    const authToken = await storage.getToken();
+
+    if (!authToken) {
+      console.log('Authentication token not found.');
+      alert('Authentication token not found.');
+      return;
+    }
+
+    if (!email) {
+      console.log('User not found.');
+      alert('User not found.');
+      return;
+    }
+
+    const result = await deleteAccount.deleteAccount(email, authToken);
+    
+    if (!result.ok) {
+      console.log(result.data.message);
+      alert(result.data.message);
+      return;
+    }
+
+    logOut();
+  }
 
   return (
     <Screen style={styles.screen}>
@@ -42,15 +72,15 @@ const AccountSettingsScreen = ({navigation}) => {
         <View style={styles.listContainer}>
           <ListItem 
             title="Name"
-            subtitle={user.username.toUpperCase()}
+            subtitle={user?.username?.toUpperCase()}
             IconComponent={<Icon name="account" size={30} color={colors.amberGlow} />}
             // onPress={()=> navigation.navigate(routes.NAME_RESET)}
           />
           <ListItem 
             title="Email"
-            subtitle={user.email}
+            subtitle={user?.email}
             IconComponent={<Icon name="email" size={30} color={colors.amberGlow} />}
-            onPress={()=> navigation.navigate(routes.EMAIL_RESET)}
+            // onPress={()=> navigation.navigate(routes.EMAIL_RESET)}
           />
            <ListItem 
             title="Password"
@@ -61,8 +91,17 @@ const AccountSettingsScreen = ({navigation}) => {
           <ListItem
             title="Delete account"
             subtitle="Delete your account permanently. This action cannot be undone."
-            IconComponent={<Icon name="delete" size={30} color={colors.amberGlow} />}
-            // onPress={()=> navigation.navigate(routes.DELETE_ACCOUNT)}
+            style={{color: colors.punch, backgroundColor: colors.midnight, borderRadius: 5, padding: 5,}}
+            IconComponent={<Icon name="delete" size={30} color={colors.punch} />}
+            onPress={()=> Alert.alert(
+              "Account Termination",
+              "Are you sure you want to delete your account? This action cannot be undone!",
+              [
+                { text: "Yes", onPress: () => performDeleteAccount() },
+                  { text: "No" },
+              ],
+              { cancelable: true }
+          )}
           />
         </View>
         <AppButton 

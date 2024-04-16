@@ -11,4 +11,5 @@ export default Object.freeze({
     FORGOT_PASSWORD: 'ForgotPassword',
     SHARE_TITLE_SCREEN: 'ShareTitleScreen',
     CRIT: 'Crit',
+    RADAR_PRICE_CHECK: 'RadarPriceCheck',
 })

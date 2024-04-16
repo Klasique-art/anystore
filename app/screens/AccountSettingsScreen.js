@@ -29,7 +29,7 @@ const AccountSettingsScreen = ({navigation}) => {
         ],
         { cancelable: true }
     )
-}
+} 
 
   const performDeleteAccount = async () => {
     const authToken = await storage.getToken();

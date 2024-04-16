@@ -35,7 +35,7 @@ const FavAndCartNavigator = () => {
         <Stack.Screen 
             name='Cart' 
             component={CartScreen}
-        />
+        /> 
     </Stack.Navigator>
   )
 }

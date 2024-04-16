@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+
 import Screen from '../components/Screen';
 import colors from '../config/colors';
 import AppText from '../components/AppText';
 import AppInput from '../components/AppInput';
 import AppButton from '../components/AppButton';
+import SearchInput from '../components/SearchInput';
 import routes from '../navigation/routes';
 import chatGroup from '../api/chatGroup';
 import useAuth from '../auth/useAuth';
@@ -24,35 +26,51 @@ function ShareTitleScreen({navigation, route}) {
     }
   return (
     <Screen style={styles.screen}>
-          <View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.container}>
               <AppText style={{color: colors.amberGlow, marginVertical: 20}}>Enter chat group name. This will create a group where you can chat with users.</AppText>
-              <AppInput
-                  placeholder="Enter group title"
-                  placeholderTextColor={colors.amberGlow}
-                  icon="text"
-                  autoCorrect={true}
-                  keyboardType="default"
-                  maxLength={25}
-                  onChangeText={text => setTitle(text)}
-                  value={title}
+              <SearchInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                placeholder="Search products by Keyword"
+                placeholderTextColor={colors.misty}
+                onChangeText={text => setTitle(text)}
               />
               <AppButton
-                  title="Share"
-                  color={colors.amberGlowLight}
-                  onPress={handleSubmit}
-                  style={{marginTop: 20, alignSelf: "center"}}
-                  width='50%'
+                title="Share"
+                color={colors.amberGlowLight}
+                onPress={handleSubmit}
+                style={{marginTop: 20, alignSelf: "center"}}
+                width='50%'
               />
           </View>
+      </TouchableWithoutFeedback>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  input: {
+    width: '100%',
+    height: 50,
+    backgroundColor: colors.amberGlow,
+    borderRadius: 5,
+    paddingHorizontal: 15,
+    color: colors.midnight,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    marginBottom: 20,
+  },
   screen: {
     backgroundColor: colors.midnight,
     padding: 10,
     paddingTop: 0,
+  },
+  container: {
+    padding: 10,
+    width: '100%',
+    height: '100%',
   },
 });
 

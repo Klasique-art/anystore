@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Keyboard } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -46,31 +46,41 @@ function StoreList() {
       }
     };
 
+    const websiteNameRegex = (name) => {
+      return name.replace(/www.|.com/g, '');
+    };
+
+    const generateRandomId = () => {
+      return Math.floor(Math.random() * 1000000)
+    }
+
     const handleAddToCart = async (product)=> {
         addToCart(product);
     }
+
     const handleProductPress = item => {
         navigation.navigate("ProductDetails", item);
         navigation.setOptions({
             headerTitle: item.name,
         });
     };
+
     const handleSearch = () => {
         setLoading(true)
         setProductLoaded(true)
+        Keyboard.dismiss()
 
-        axios.get(`https://anystore-13b784c090db.herokuapp.com/api/stores/${storeName}/?product=${searchText}`, {
+        axios.get(`https://pacific-sierra-04938-5becb39a6e4f.herokuapp.com/api/search/shop/?shopName=${storeName}&&query=${searchText}`, {
             timeout: 10000
         })
         .then(res => {
-            const result = res.data
-            const products = result[0].products
-            setStoreProducts(products)
+            const result = res.data.map(product => ({ ...product, id: generateRandomId() }));
+            setStoreProducts(result)
 
             setLoading(false)
             setProductLoaded(true)
 
-            if (products.length === 0) {
+            if (result.length === 0) {
                 setResultNotFound(true)
             } else {
                 setResultNotFound(false)
@@ -100,14 +110,14 @@ function StoreList() {
          <FlatList 
           style={{ flex: 1}}
           data={storeProducts}
-          keyExtractor={(storeProduct) => storeProduct?.id.toString()}
+          keyExtractor={(storeProduct) => storeProduct?.id?.toString() || generateRandomId().toString()}
           renderItem={({item}) => (
               <ProductCard 
-                  desc={item?.description}
+                  desc={item?.websiteDescription}
                   name={item?.title}
                   price={item?.price}
-                  image={item?.images[0].image}
-                  companyName={item?.stores[0]}
+                  image={item?.imageUrl || "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1713139200&semt=ais"}
+                  companyName={websiteNameRegex(item?.websiteName)}
                   addToCart 
                   addToCartOnPress={() => handleAddToCart(item)}
                   onPress={() => handleProductPress(item)}

@@ -10,7 +10,7 @@ import SearchInput from './SearchInput';
 import SearchNotFound from './SearchNotFound';
 import ItemEmpty from './ItemEmpty';
 
-const CardList = () => {
+const CardList = () => { 
   const [cartData, setCartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,6 +37,11 @@ const CardList = () => {
       setLoading(false);
     }
   };
+
+  const generateRandomId = () => {
+    return Math.floor(Math.random() * 1000000)
+  }
+
   const handleDelete = (item) => {
     const newCartData = cartData.filter((i) => i.id !== item.id);
     setCartData(newCartData);
@@ -45,6 +50,10 @@ const CardList = () => {
 
   const handleCartItemPress = (item) => {
     navigation.navigate(routes.PRODUCT_DETAILS, item);
+  };
+
+  const websiteNameRegex = (name) => {
+    return name.replace(/www.|.com/g, '');
   };
 
   const handleSearch = (text) => {
@@ -56,7 +65,7 @@ const CardList = () => {
       fetchCartItems();
       return;
     }
-    const filteredItems = cartData.filter(item => item.title.toLowerCase().includes(text.toLowerCase()) || item.stores[0].toLowerCase().includes(text.toLowerCase()) || item.description.toLowerCase().includes(text.toLowerCase()));
+    const filteredItems = cartData.filter(item => item?.title.toLowerCase().includes(text.toLowerCase()) || item?.websiteName.toLowerCase().includes(text.toLowerCase()) || item?.websiteDescription.toLowerCase().includes(text.toLowerCase()));
 
     if(filteredItems.length) {
       setCartData([...filteredItems]);
@@ -64,6 +73,7 @@ const CardList = () => {
       setResultNotFound(true);
     }
   }
+
 
   if (loading) {
     // Display a loading indicator while data is being fetched
@@ -93,15 +103,15 @@ const CardList = () => {
                                 />}
     {resultNotFound ? <SearchNotFound /> : <FlatList
         data={cartData}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => item.id ? item.id.toString() : generateRandomId().toString()}
         renderItem={({ item }) => (
           <CartItem
-            companyName={item.stores[0]}
-            desc={item.description}
-            image={item.images[0].image}
-            name={item.title}
+            companyName={websiteNameRegex(item?.websiteName)}
+            desc={item?.websiteDescription}
+            image={item?.imageUrl || "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1713139200&semt=ais"}
+            name={websiteNameRegex(item?.websiteName)}
             onPress={() => handleCartItemPress(item)}
-            price={item.price}
+            price={item?.price}
             delPress={() => handleDelete(item)}
           />
         )}

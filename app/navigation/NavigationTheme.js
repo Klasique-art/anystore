@@ -8,4 +8,4 @@ export default {
         primary: colors.misty,
         background: colors.midnight,
     },
-};
+}; 

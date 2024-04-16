@@ -1,72 +1,98 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Keyboard, TouchableWithoutFeedback, TouchableOpacity, ScrollView } from 'react-native';
 import axios from 'axios';
 
 import colors from '../config/colors';
 import Screen from '../components/Screen';
-import SearchInput from '../components/SearchInput';
-import useAuth from '../auth/useAuth';
-import SearchNotFound from '../components/SearchNotFound';
 import AppText from '../components/AppText';
+import useAuth from '../auth/useAuth';
 
 const ShareScreen = ({navigation, route}) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const product = route.params.product;
-  const groupId = route.params.groupId
-  const groupName = route.params.title
+  const [groups, setGroups] = useState([]);
+
+  const product = route.params;
   const { user } = useAuth();
+  const userId = user?._id;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`https://pacific-sierra-04938-5becb39a6e4f.herokuapp.com/api/search/?query=${searchQuery}`);
+    fetchGroups();
+  }, []);
 
-        // filter out the current user from the search results
-        const filteredResults = response.data.filter((result) => result !== user.username);
-        setSearchResults(filteredResults);
-      } catch (error) {
-        console.error('Error fetching search results:', error);
+  const fetchGroups = async () => {
+    try {
+      const response = await axios.get(`https://pacific-sierra-04938-5becb39a6e4f.herokuapp.com/api/user/groups/?userId=${userId}`)
+  
+      if(response.data) {
+        setGroups(response.data);
       }
-    };
 
-    fetchData();
-  }, [searchQuery]);
+    } catch (error) {
+      console.error('Error fetching groups:', error);
+    }
+  }
+
+  const handleSendProductToGroup = (groupId) => {
+    axios.post(`https://pacific-sierra-04938-5becb39a6e4f.herokuapp.com/api/share-to-group`, {
+      groupId: groupId,
+      content: JSON.stringify(product),
+      senderId: userId,
+    })
+    .then((response) => {
+      if(response.data) {
+        console.log('Product sent to group:', response.data);
+        navigation.goBack();
+      }
+    })
+    .catch((error) => {
+      console.error('Error sending product to group:', error);
+    });
+  }
+
+  const createdGroups = groups?.createdGroups;
+  const joinedGroups = groups?.joinedGroups;
 
   return (
     <Screen style={styles.screen}>
       <TouchableWithoutFeedback
         onPress={() => {
-          console.log('dismissed keyboard');
           Keyboard.dismiss();
         }}
-      >
+      > 
         <>
-        <View style={styles.header}>
-          <SearchInput
-            placeholder="Search user by name"
-            placeholderTextColor={colors.misty}
-            value={searchQuery}
-            onChangeText={(text) => setSearchQuery(text)}
-          />
-        </View>
         <View style={styles.container}>
-          {searchResults.length > 0 ? (
-            searchResults.map((result) => (
-              <TouchableOpacity 
-                key={result} 
-                onPress={() => navigation.navigate('Crit', { username: result , product: product, groupId: groupId, groupName: groupName })}
-                style={styles.item}
-                activeOpacity={0.6}
-              >
-                <View style={styles.itemInner}>
-                  <AppText style={styles.text}>{result}</AppText> 
+          {/* groups */}
+          <ScrollView>
+            <View>
+              {createdGroups && createdGroups.length > 0 && (
+                <View>
+                  <AppText style={{ color: colors.white, marginVertical: 10 }}>Created Groups</AppText>
+                  {createdGroups.map((group) => (
+                    <TouchableOpacity 
+                      key={group?._id} 
+                      style={styles.item} 
+                      onPress={() => handleSendProductToGroup(group?._id)}
+                    >
+                      <AppText style={{ color: colors.white, fontWeight: "bold" }}>{group?.groupName}</AppText>
+                    </TouchableOpacity>
+                  ))}
                 </View>
-              </TouchableOpacity>
-            )) 
-          ) : (
-            <SearchNotFound />
-          )}
+              )}
+              {joinedGroups && joinedGroups.length > 0 && (
+                <View>
+                  <AppText style={{ color: colors.white, marginVertical: 10 }}>Joined Groups</AppText>
+                  {joinedGroups.map((group) => (
+                    <TouchableOpacity 
+                      key={group._id} 
+                      style={styles.item}
+                      onPress={() => handleSendProductToGroup(group?._id)}
+                    >
+                      <AppText style={{ color: colors.white, fontWeight: "bold" }}>{group?.groupName}</AppText>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+          </ScrollView>
         </View>
         </>
       </TouchableWithoutFeedback>
@@ -80,11 +106,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   item: {
-    width: "50%",
+    width: "65%",
     height: 50,
     backgroundColor: colors.amberGlow,
     marginVertical: 10,
     borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
   },
   itemInner: {
     flex: 1,

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity, Alert, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 import AppText from '../components/AppText';
@@ -13,12 +13,25 @@ import routes from '../navigation/routes';
 function ProductDetails({route, navigation}) {
     const [cartItemAdded, setCartItemAdded] = useState([]);
     const [favStoreAdded, setFavStoreAdded] = useState([]);
+    const [radarItemAdded, setRadarItemAdded] = useState([]);
     const product = route.params;
     
     useEffect(() => {
         fetchFavStores()
         fetchCartItems();
+        fetchRadarItems();
     }, []);
+
+    const fetchRadarItems = async () => {
+        try {
+            // getting radar items from AsyncStorage
+            const existingRadarItems = await AsyncStorage.getItem('radarItems');
+            const parsedExistingRadarItems = JSON.parse(existingRadarItems) || [];
+            setRadarItemAdded(parsedExistingRadarItems);
+        } catch (error) {
+            console.error('Error fetching radar items:', error);
+        }
+    }
     
     const fetchCartItems = async () => {
         try {
@@ -32,13 +45,13 @@ function ProductDetails({route, navigation}) {
 
     const fetchFavStores = async () => {
         try {
-          const existingStores = await AsyncStorage.getItem('favStores');
-          const parsedExistingStores = JSON.parse(existingStores) || [];
-          setFavStoreAdded(parsedExistingStores);
+        const existingStores = await AsyncStorage.getItem('favStores');
+        const parsedExistingStores = JSON.parse(existingStores) || [];
+        setFavStoreAdded(parsedExistingStores);
         } catch (error) {
-          console.error('Error fetching fav stores:', error);
+        console.error('Error fetching fav stores:', error);
         }
-      };
+    };
 
     const handleAddToCart = async (productID) =>{
         try {
@@ -66,12 +79,36 @@ function ProductDetails({route, navigation}) {
             console.error('Error adding product to cart:', error);
           }
     };
-    const handleBuyNow = productID => {
-        console.log("buy now", productID)
+
+    const openBuyNowLink = link => {
+        Linking.openURL(link);
     }
-    const handleAddToRadar = productID => {
-        console.log("added to radar", productID)
+
+    const handleAddToRadar = async (productID) => {
+        try {
+            // Retrieve existing radar items from AsyncStorage
+            const existingRadarItems = await AsyncStorage.getItem('radarItems');
+            const parsedExistingRadarItems = JSON.parse(existingRadarItems) || [];
+
+            // Check if the product is already in the radar
+            const isProductInRadar = parsedExistingRadarItems.some((item) => item.id === productID);
+
+            if (isProductInRadar) {
+                // Product is already in the radar
+                Alert.alert("Product is already in the radar")
+                return;
+            }
+            // Add the new product to the radar
+            const updatedRadarItems = [...parsedExistingRadarItems, product];
+            setRadarItemAdded(updatedRadarItems)
+            await AsyncStorage.setItem('radarItems', JSON.stringify(updatedRadarItems));
+            Alert.alert("Product added to radar")
+
+        } catch (error) {
+            console.error('Error adding product to radar:', error);
+        }
     }
+
     const handleAddToFavStores = async (store) => {
         try {
             // Retrieve existing stores from AsyncStorage
@@ -101,25 +138,33 @@ function ProductDetails({route, navigation}) {
     }
 
     const handleShare = product => {
-        navigation.navigate(routes.SHARE_TITLE_SCREEN, product) 
+        navigation.navigate(routes.SHARE_SCREEN, product) 
     }
+    // regex to remove 'www.' and '.com' from websiteName
+  const websiteNameRegex = (name) => {
+    return name.replace(/www.|.com/g, '');
+  };
+
   return (
     <Screen style={styles.screen}>
         <View style={styles.container}>
             <View style={styles.image}>
-                <Image source={{uri: product.images[0].image}} style={{width: "100%", height: "100%"}}/>
+                <Image 
+                    source={{uri: product?.imageUrl || "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1713139200&semt=ais"}} 
+                    style={{width: "100%", height: "100%"}}
+                />
             </View>
             <View style={styles.detailsContainer}>
                 <View style={styles.details}>
-                    <AppText style={styles.name} numberOfLines={1}>{product.title}</AppText>
-                    <AppText style={styles.price}>${product.price}</AppText>
+                    <AppText style={styles.name} numberOfLines={1}>{websiteNameRegex(product?.title)}</AppText>
+                    <AppText style={styles.price}>${product?.price || "N/A"}</AppText>
                 </View>
-                {product.stores[0] && 
+                {product?.websiteName && 
                     <View style={styles.storeWrapper}>
-                        <AppText style={styles.store}>{product.stores[0]}</AppText>
+                        <AppText style={styles.store}>{websiteNameRegex(product?.websiteName)}</AppText>
                         <TouchableOpacity 
                             style={{flexDirection: "row", alignItems: "center"}} 
-                            onPress={()=> handleAddToFavStores(product.stores[0])}
+                            onPress={()=> handleAddToFavStores(websiteNameRegex(product?.websiteName))}
                         >
                             <AppText style={styles.heart}>Add to Favorite Stores</AppText>
                             <Icon
@@ -131,7 +176,7 @@ function ProductDetails({route, navigation}) {
                     </View>
                 }
                 <View style={styles.buttonWrapper}>
-                    <TouchableOpacity style={styles.addToCartButton} onPress={()=> handleAddToCart(product.id)}>
+                    <TouchableOpacity style={styles.addToCartButton} onPress={()=> handleAddToCart(product?.id)}>
                         <AppText style={styles.cartText}>Add to cart</AppText>
                         <Icon
                             name="cart"
@@ -139,19 +184,17 @@ function ProductDetails({route, navigation}) {
                             color={colors.midnight}
                         />
                     </TouchableOpacity>
-                    <AppButton 
-                    style={styles.button}
-                        title="Buy Now"
-                        onPress={()=> handleBuyNow(product.id)}
-                    />
+                    <TouchableOpacity style={styles.button} onPress={()=> openBuyNowLink(product?.originalUrl)}>
+                        <AppText style={styles.buttonText}>Buy Now</AppText>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.radarShareWrapper}>
-                    {/* <AppButton 
+                    <AppButton 
                         title="Add to Radar"
                         width='70%'
-                        onPress={()=> handleAddToRadar(product.id)}
+                        onPress={()=> handleAddToRadar(product?.id)}
                         style={styles.radar}
-                    /> */}
+                    />
                     <TouchableOpacity style={styles.share} onPress={()=> handleShare(product)}>
                         <Icon 
                             name="share"
@@ -163,7 +206,7 @@ function ProductDetails({route, navigation}) {
                 </View>
                 <Accordion 
                     title="Product Information"
-                    content={product.description}
+                    content={product?.websiteDescription}
                 />
             </View>
         </View>
@@ -186,7 +229,13 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 50,
         borderRadius: 5,
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: colors.horizon,
+    },
+    buttonText: {
+        textTransform: "uppercase",
+        fontWeight: "bold",
     },
     buttonWrapper: {
         flexDirection: "row",
@@ -199,6 +248,7 @@ const styles = StyleSheet.create({
     },
     cartText: {
         textTransform: "uppercase",
+        fontSize: 15,
     },
   container: {
     width: '100%',
@@ -217,6 +267,9 @@ const styles = StyleSheet.create({
         width: '100%',
         height: "65%",
 
+    },
+    heart: {
+        fontSize: 14,
     },
     image: {
         width: '100%',

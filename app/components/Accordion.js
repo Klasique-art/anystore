@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   text: {
-    fontSize: 20,
+    fontSize: 16,
     color: colors.white,
     fontWeight: 'bold',
     letterSpacing: 1,

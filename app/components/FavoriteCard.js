@@ -10,8 +10,8 @@ const ProductCard = ({shopName, onPress, removeFavorite}) => {
     
     const removeAlert = () => {
         Alert.alert(
-            "Remove Favorite",
-            "Are you sure you want to remove this favorite?",
+            "Remove Favorite Store",
+            "Are you sure you want to remove this favorite store?",
             [
                 { text: "No" },
                 { text: "Yes", onPress: removeFavorite },

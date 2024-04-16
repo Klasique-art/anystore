@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React, { useState,} from 'react'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, Keyboard } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 
@@ -22,16 +22,22 @@ const ProductsScreen = () => {
     const [productLoaded, setProductLoaded] = useState(true)
     const navigation = useNavigation()
 
+    // generate random id for the products
+    const generateRandomId = () => {
+        return Math.floor(Math.random() * 1000000)
+    }
+
     const handleSearch = () => {
         setLoading(true)
         setProductLoaded(true)
+        Keyboard.dismiss()
         
-        axios.get(`https://anystore-13b784c090db.herokuapp.com/api/products/?search=${searchText}`, {
+        axios.get(`https://pacific-sierra-04938-5becb39a6e4f.herokuapp.com/api/search/products/?query=${searchText}`, {
             timeout: 10000
         })
             .then(res => {
-                const result = res.data
-                setProducts(result)
+                const result = res.data.map(product => ({ ...product, id: generateRandomId() }));
+                setProducts([...result])
                 setLoading(false)
                 setProductLoaded(true)
 
@@ -48,9 +54,7 @@ const ProductsScreen = () => {
                 setProductLoaded(false)
             })
     }
-    const navBarToggle = () => {
-        console.log("toggle navbar")
-    }
+
     const handleFavorite = () => {
         navigation.navigate(routes.FAVORITES)
     }
@@ -65,10 +69,18 @@ const ProductsScreen = () => {
                 <View style={styles.navbar}>
                     <Text style={{ color: colors.white, fontSize: 20, fontWeight: '900', marginLeft: 10 }}>Anystore</Text>
                     <View style={styles.iconBox}>
-                        <TouchableOpacity onPress={handleFavorite}>
+                        <TouchableOpacity 
+                            onPress={handleFavorite}
+                            accessible={true}
+                            accessibilityLabel='Favorite stores' 
+                        >
                             <MaterialCommunityIcons name="heart" size={30} color={colors.punch} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleCart}>
+                        <TouchableOpacity 
+                            onPress={handleCart}
+                            accessible={true}
+                            accessibilityLabel='Cart'
+                        >
                             <MaterialCommunityIcons name="cart" size={30} color={colors.amberGlow} />
                         </TouchableOpacity>
                     </View>
@@ -76,7 +88,7 @@ const ProductsScreen = () => {
                 <SearchInput
                     autoCapitalize="none"
                     autoCorrect={false}
-                    placeholder="Search products by Keyword"
+                    placeholder="Search Products by Keyword"
                     placeholderTextColor={colors.misty}
                     onChangeText={text => setSearchText(text)}
                     searchPress={handleSearch}
@@ -99,7 +111,7 @@ const ProductsScreen = () => {
                     <ListItem
                         title="No result found"
                         subtitle="Try searching with another keyword"
-                        style={{color: colors.midnight, fontSize: 18, fontWeight: "bold"}}
+                        style={{color: colors.white, fontSize: 18, fontWeight: "bold"}}
                         IconComponent={
                             <MaterialCommunityIcons name="alert-circle" size={35} color={colors.punch} />
                         }
@@ -114,7 +126,7 @@ const ProductsScreen = () => {
                     <ListItem
                         title="No product loaded"
                         subtitle="There was an error loading products, please try again later."
-                        style={{color: colors.midnight, fontSize: 18, fontWeight: "bold"}}
+                        style={{color: colors.white, fontSize: 18, fontWeight: "bold"}}
                         IconComponent={
                             <MaterialCommunityIcons name="alert-circle" size={35} color={colors.punch} />
                         }

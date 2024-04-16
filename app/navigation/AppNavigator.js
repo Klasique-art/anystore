@@ -7,6 +7,7 @@ import colors from '../config/colors'
 import ProductNavigator from './ProductNavigator'
 import RadarNavigation from './RadarNavigation'
 import FriendlyScreen from '../screens/FriendlyScreen'
+import CritNavigation from './CritNavigation'
 
 const Tab = createBottomTabNavigator()
 
@@ -34,7 +35,6 @@ const AppNavigator = () => {
                 <MaterialCommunityIcons name='home' color={color} size={size}/>
               ),
             }}
-            
         />
         <Tab.Screen 
             name='Radar' 
@@ -48,7 +48,7 @@ const AppNavigator = () => {
         />
         <Tab.Screen 
             name='Crit' 
-            component={FriendlyScreen} 
+            component={CritNavigation} 
             options={{
               headerShown: false,
               tabBarIcon: ({color, size}) => (

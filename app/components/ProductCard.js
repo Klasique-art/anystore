@@ -15,17 +15,24 @@ const ProductCard = ({name,image, desc, price, companyName, onPress, addToCart, 
                           name="cart-plus" 
                           color={colors.amberGlow} 
                           size={30} 
-                        />
+              /> 
           </TouchableOpacity>
           }
             <View style={styles.image}>
-              <Image source={{uri: image}} style={{width: "100%", height: "100%"}}/>
+              <Image 
+                source={{uri: image}} 
+                style={{
+                  width: "100%", 
+                  height: "100%",
+                  resizeMode: "cover",
+                }}
+              />
             </View>
             <View style={styles.details}>
                 <Text style={styles.name} numberOfLines={1}>{name}</Text>
                 <AppText numberOfLines={2} style={styles.desc}>{desc}</AppText>
                 <View style={{flexDirection: "row", justifyContent: "space-between", gap: 5}}>
-                    <AppText style={[styles.price, styles.cardButton]}>${price}</AppText>
+                    <AppText style={[styles.price, styles.cardButton]}>${price || "N/A"}</AppText>
                     {companyName && <AppText style={[styles.companyName, styles.cardButton]} numberOfLines={1}>{companyName}</AppText>}
                 </View>  
             </View>
@@ -73,7 +80,7 @@ const styles = StyleSheet.create({
     companyName: {
         backgroundColor: colors.amberGlow,  
         color: colors.midnight,
-        fontSize: 16,
+        fontSize: 12,
         flex: 1
     },
     details: {

@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     screen: {
         backgroundColor: colors.midnight,
         padding: 10,
+        minHeight: "100%"
     },
 });
 

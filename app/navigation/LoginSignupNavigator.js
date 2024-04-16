@@ -15,7 +15,7 @@ const LoginSignupStack = () => (
                 component={WelcomeScreen} 
                 options={()=>({
                     headerShown: false,
-                })}
+                })} 
             />
             <Stack.Screen 
                 name="Login" 

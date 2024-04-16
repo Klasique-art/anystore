@@ -4,9 +4,6 @@ import * as Yup from 'yup';
 
 import colors from '../config/colors';
 import Screen from '../components/Screen';
-import AppText from '../components/AppText';
-import AppInput from '../components/AppInput';
-import AppButton from '../components/AppButton';
 import passwordResetApi from '../api/passwordReset'
 import { AppForm, AppFormField, SubmitButton, ErrorMessage } from '../components/forms';
 

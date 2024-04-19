@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AppText from '../components/AppText';
 import colors from '../config/colors';
-import Accordion from '../components/Accordion';
 import AppButton from '../components/AppButton'; 
 import Icon from '../components/Icon';
 import Screen from '../components/Screen';
@@ -151,12 +150,14 @@ function ProductDetails({route, navigation}) {
             <View style={styles.image}>
                 <Image 
                     source={{uri: product?.imageUrl || "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1713139200&semt=ais"}} 
-                    style={{width: "100%", height: "100%"}}
+                    style={{width: "100%", height: "100%", resizeMode: "contain"}}
                 />
             </View>
             <View style={styles.detailsContainer}>
                 <View style={styles.details}>
-                    <AppText style={styles.name} numberOfLines={1}>{websiteNameRegex(product?.title)}</AppText>
+                    <AppText style={{
+                        textTransform: "Capitalize",
+                    }} numberOfLines={1}>{websiteNameRegex(product?.title)}</AppText>
                     <AppText style={styles.price}>${product?.price || "N/A"}</AppText>
                 </View>
                 {product?.websiteName && 
@@ -204,9 +205,14 @@ function ProductDetails({route, navigation}) {
                         <AppText style={styles.shareText}>SHARE</AppText>
                     </TouchableOpacity>
                 </View>
-                <Accordion 
+                <AppButton
                     title="Product Information"
-                    content={product?.websiteDescription}
+                    color={colors.amberGlowLight}
+                    style={{
+                        borderRadius: 5,
+                        marginVertical: 10,
+                    }}
+                    onPress={()=> navigation.navigate(routes.PRODUCT_INFO, {productDetails: product?.websiteDescription})}
                 />
             </View>
         </View>
@@ -319,6 +325,7 @@ const styles = StyleSheet.create({
     store: {
         fontSize: 18,
         color: colors.misty,
+        textTransform: "capitalize",
     },
     storeWrapper: {
         flexDirection: "row",

@@ -22,7 +22,7 @@ const ProductsScreen = () => {
     const [productLoaded, setProductLoaded] = useState(true)
     const navigation = useNavigation()
 
-    // generate random id for the products
+    // generate random id
     const generateRandomId = () => {
         return Math.floor(Math.random() * 1000000)
     }
@@ -58,6 +58,7 @@ const ProductsScreen = () => {
     const handleFavorite = () => {
         navigation.navigate(routes.FAVORITES)
     }
+    
     const handleCart = () => {
         navigation.navigate(routes.CART)
     }
@@ -145,17 +146,18 @@ const styles = StyleSheet.create({
     },
     mainBody: {
         width: '100%',
-        height: '75%',
-        marginTop: 40,
+        height: '80%',
+        marginTop: 35,
         backgroundColor: colors.horizon,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         paddingHorizontal: 15,
         paddingVertical: 15,
+        paddingBottom: 85,
     },
     navbar: {
         width: '100%',
-        height: 50,
+        height: 30,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -165,6 +167,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: "20%",
         gap: 15,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
     },
 });
 

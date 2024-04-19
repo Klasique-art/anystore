@@ -6,6 +6,7 @@ import colors from '../config/colors'
 import ShareScreen from '../screens/ShareScreen'
 import BarcodeScreen from '../screens/BarcodeScreen'
 import ShareTitleScreen from '../screens/ShareTitleScreen'
+import ProductInfoScreen from '../screens/ProductInfoScreen'
 
 const Stack = createStackNavigator()
 
@@ -56,6 +57,13 @@ const ProductNavigator = () => {
             component={BarcodeScreen}
             options={{
                 headerTitle: "Barcode / Qrcode scanner",
+            }}
+        />
+        <Stack.Screen 
+            name='ProductInfoScreen' 
+            component={ProductInfoScreen}
+            options={{
+                headerTitle: "Product Information",
             }}
         />
     </Stack.Navigator>

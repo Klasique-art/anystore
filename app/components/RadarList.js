@@ -9,6 +9,7 @@ import routes from '../navigation/routes'
 import colors from '../config/colors'
 import ItemEmpty from './ItemEmpty'
 import SearchNotFound from './SearchNotFound'
+import AppText from './AppText'
 
 function RadarList(props) {
   const [radarData, setRadarData] = useState([])
@@ -47,6 +48,10 @@ function RadarList(props) {
     );
   }
 
+  const generateRandomId = () => {
+    return Math.floor(Math.random() * 1000000)
+  }
+
   const handleDelete = item => {
     const newRadarData = radarData.filter(i => i.id !== item.id)
     setRadarData(newRadarData) 
@@ -54,6 +59,11 @@ function RadarList(props) {
   }
 
   const websiteNameRegex = (name) => {
+    // if there is no name, return empty string
+    if (!name) {
+      return ""
+    }
+    
     return name.replace(/www.|.com/g, '');
   };
 
@@ -86,6 +96,9 @@ function RadarList(props) {
         height: "100%"
       }}
     >
+      <AppText style={[styles.text, {
+        fontSize: radarData.length > 0 ? 12 : 20,
+      }]}>Track your products to get notified of price changes.</AppText>
       {radarData.length > 0 && <View style={styles.headBox}>
         <SearchInput 
           placeholder="Search Product" 
@@ -102,7 +115,7 @@ function RadarList(props) {
         
       {resultNotFound === true ? <SearchNotFound /> : <FlatList 
           data={radarData}
-          keyExtractor={item => item?.id?.toString()} 
+          keyExtractor={(item, index) => item.id ? item.id.toString() : generateRandomId().toString()}  
           renderItem={({item})=> <CartItem 
                                       companyName={websiteNameRegex(item?.websiteName)}
                                       desc={item?.websiteDescription}
@@ -136,5 +149,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  text: {
+    color: colors.amberGlow,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10
+  }
 })
 export default RadarList;

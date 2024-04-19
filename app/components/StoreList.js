@@ -14,7 +14,6 @@ import ListItem from './ListItem';
 
 function StoreList() {
     const [storeProducts, setStoreProducts] = useState([])
-    const [refreshing, setRefreshing] = useState(false)
     const [searchText, setSearchText] = useState("")
     const [resultNotFound, setResultNotFound] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -123,11 +122,6 @@ function StoreList() {
                   onPress={() => handleProductPress(item)}
               />
           )}
-          refreshing={refreshing}
-          onRefresh={()=>{
-              setLoading(true)
-              setStoreProducts(storeProducts)
-          }}
         />
         {resultNotFound === true && 
                 <View style={{
@@ -167,13 +161,14 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     paddingTop: 0,
-    paddingBottom: 220,
+    paddingBottom: 10,
     marginTop: 0,
     height: "100%",
   },
   header: {
     marginTop: 0,
     paddingBottom: 10,
+    paddingTop: 0,
   },
 });
 

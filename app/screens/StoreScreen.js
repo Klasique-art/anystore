@@ -4,14 +4,13 @@ import { View, StyleSheet, TouchableWithoutFeedback, Keyboard} from 'react-nativ
 import colors from '../config/colors';
 import Screen from '../components/Screen';
 import StoreList from '../components/StoreList';
-import SearchInput from '../components/SearchInput';
 
 function StoreScreen({route, navigation}) {
   const { shopName } = route.params;
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: shopName, 
+      title: shopName?.toUpperCase(), 
     });
   }, [navigation, shopName]);
 
@@ -35,6 +34,7 @@ const styles = StyleSheet.create({
   
     screen: {
         backgroundColor: colors.midnight,
+        paddingTop: 0,
     }
 });
 

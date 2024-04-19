@@ -63,12 +63,12 @@ const AccountSettingsScreen = ({navigation}) => {
         <Text style={styles.heading}>Account Settings</Text>
       </View>
       <View style={styles.itemsContainer}>
-        {/* <View style={{marginBottom: 20,}}>
+        <View style={{marginBottom: 20,}}>
           <ImageInput 
             imageUri={imageUri} 
             onChangeImage={uri => setImageUri(uri)}
           />
-        </View> */}
+        </View>
         <View style={styles.listContainer}>
           <ListItem 
             title="Name"

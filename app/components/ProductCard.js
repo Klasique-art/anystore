@@ -24,7 +24,7 @@ const ProductCard = ({name,image, desc, price, companyName, onPress, addToCart, 
                 style={{
                   width: "100%", 
                   height: "100%",
-                  resizeMode: "cover",
+                  resizeMode: "contain",
                 }}
               />
             </View>

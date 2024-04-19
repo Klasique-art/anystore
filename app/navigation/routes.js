@@ -12,4 +12,5 @@ export default Object.freeze({
     SHARE_TITLE_SCREEN: 'ShareTitleScreen',
     CRIT: 'Crit',
     RADAR_PRICE_CHECK: 'RadarPriceCheck',
+    PRODUCT_INFO: 'ProductInfoScreen',
 })

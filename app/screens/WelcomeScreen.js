@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 50,
         textAlign: 'center',
-        color: colors.amberGlow,
+        color: colors.white,
         fontWeight: '900',
         marginBottom: 20,
     },

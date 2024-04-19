@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,9 +12,11 @@ import AuthNavigation from './app/navigation/AuthNavigation';
 import AuthContext from './app/auth/context';
 import authStorage from './app/auth/storage';
 
-// logger.start();
+logger.start();
 
 export default function App() {
+  logger.log(new Error('New Error Test'))
+  
   const [user, setUser] = useState()
   
   const restoreUser = async () => {

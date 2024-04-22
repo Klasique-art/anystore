@@ -15,8 +15,6 @@ import authStorage from './app/auth/storage';
 logger.start();
 
 export default function App() {
-  logger.log(new Error('New Error Test'))
-  
   const [user, setUser] = useState()
   
   const restoreUser = async () => {

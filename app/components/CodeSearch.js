@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   searchBar: {
     width: '90%',
     alignSelf: 'center',
-    height: 50,
+    height: 45,
     backgroundColor: colors.light,
     alignItems: 'center',
     justifyContent: 'center',

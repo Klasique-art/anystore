@@ -42,7 +42,7 @@ const AccountNavigator = () => {
             name="PasswordReset" 
             component={PasswordResetScreen} 
             options={{
-                title: "Reset Password",
+                title: "Change Password",
             }}
 
         />

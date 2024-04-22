@@ -28,6 +28,7 @@ const ProductsScreen = () => {
     }
 
     const handleSearch = () => {
+        setProducts([])
         setLoading(true)
         setProductLoaded(true)
         Keyboard.dismiss()

@@ -69,9 +69,9 @@ const PasswordResetScreen = ({navigation}) => {
       <KeyboardAvoidingView>
       <View style={styles.container}>
         <AppForm 
-            initialValues={{oldPassword: "", newPassword1: "", newPassword2: ""}} 
-            onSubmit={handleChangePassword}
-            validationSchema={validationSchema}
+          initialValues={{oldPassword: "", newPassword1: "", newPassword2: ""}} 
+          onSubmit={handleChangePassword}
+          validationSchema={validationSchema} 
         >
           {error && <ErrorMessage error={error} visible={error} />}
             <AppFormField 

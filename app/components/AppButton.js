@@ -3,10 +3,10 @@ import React from 'react'
 
 import colors from '../config/colors'
 
-const AppButton = ({title, color = colors.misty, onPress, width = "100%", style, ...otherProps}) => {
+const AppButton = ({title, color = colors.misty, textStyle, onPress, width = "100%", style, ...otherProps}) => {
   return (
     <TouchableHighlight onPress={onPress} style={[styles.button, {backgroundColor: color, width: width}, style]} underlayColor={colors.light} {...otherProps}>
-        <Text style={styles.text}>{title}</Text>
+        <Text style={[styles.text, textStyle]}>{title}</Text>
     </TouchableHighlight>
   )
 }

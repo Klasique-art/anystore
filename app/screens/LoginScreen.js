@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         width: "100%",
-        height: "40%",
+        height: "30%",
         justifyContent: "center",
         alignItems: "center",
     },
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     },
     loginContainer: {
         width: "100%",
-        height: "60%",
+        height: "70%",
         backgroundColor: colors.horizon,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,

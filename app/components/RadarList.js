@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import logger from '../utility/logger'
 
 import CartItem from './cart/CartItem'
 import SearchInput from './SearchInput'
@@ -30,7 +31,7 @@ function RadarList(props) {
       }
       
     } catch (error) {
-      console.error('Error fetching radar items:', error)
+      logger.log(new Error('Error fetching radar items:' ,error))
     } finally {
       setLoading(false)
     }
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: colors.amberGlow,
+    color: colors.white,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10

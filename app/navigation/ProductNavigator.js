@@ -35,7 +35,7 @@ const ProductNavigator = () => {
             name='ProductDetails'
             component={ProductDetails}
             options={{
-                headerTitle: "Details",
+                headerTitle: "Product Details",
             }}
         />
         <Stack.Screen 

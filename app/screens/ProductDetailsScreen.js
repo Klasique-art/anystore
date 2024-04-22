@@ -141,6 +141,8 @@ function ProductDetails({route, navigation}) {
     }
     // regex to remove 'www.' and '.com' from websiteName
   const websiteNameRegex = (name) => {
+    // if no name
+    if (!name) return;
     return name.replace(/www.|.com/g, '');
   };
 
@@ -156,7 +158,7 @@ function ProductDetails({route, navigation}) {
             <View style={styles.detailsContainer}>
                 <View style={styles.details}>
                     <AppText style={{
-                        textTransform: "Capitalize",
+                        textTransform: "capitalize",
                     }} numberOfLines={1}>{websiteNameRegex(product?.title)}</AppText>
                     <AppText style={styles.price}>${product?.price || "N/A"}</AppText>
                 </View>
@@ -176,44 +178,57 @@ function ProductDetails({route, navigation}) {
                         </TouchableOpacity>
                     </View>
                 }
-                <View style={styles.buttonWrapper}>
-                    <TouchableOpacity style={styles.addToCartButton} onPress={()=> handleAddToCart(product?.id)}>
-                        <AppText style={styles.cartText}>Add to cart</AppText>
-                        <Icon
-                            name="cart"
-                            size={30}
-                            color={colors.midnight}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={()=> openBuyNowLink(product?.originalUrl)}>
-                        <AppText style={styles.buttonText}>Buy Now</AppText>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.radarShareWrapper}>
-                    <AppButton 
-                        title="Add to Radar"
-                        width='70%'
-                        onPress={()=> handleAddToRadar(product?.id)}
-                        style={styles.radar}
-                    />
-                    <TouchableOpacity style={styles.share} onPress={()=> handleShare(product)}>
-                        <Icon 
-                            name="share"
-                            size={30}
-                            color={colors.amberGlow}
-                        />
-                        <AppText style={styles.shareText}>SHARE</AppText>
-                    </TouchableOpacity>
-                </View>
                 <AppButton
                     title="Product Information"
                     color={colors.amberGlowLight}
                     style={{
                         borderRadius: 5,
                         marginVertical: 10,
+                        width: 'max-content',
+                        paddingHorizontal: 10,
+                        height: 40,
+                        alignSelf: 'center'
+                    }}
+                    textStyle={{
+                        fontSize: 14,
+                        fontWeight: "normal",
                     }}
                     onPress={()=> navigation.navigate(routes.PRODUCT_INFO, {productDetails: product?.websiteDescription})}
                 />
+                <View style={styles.buttonWrapper}>
+                    <TouchableOpacity style={styles.addToCartButton} onPress={()=> handleAddToCart(product?.id)}>
+                        <AppText style={styles.cartText}>Add to cart</AppText>
+                        <Icon
+                            name="cart"
+                            size={25}
+                            color={colors.amberGlow}
+                        />
+                    </TouchableOpacity>
+                    <AppButton 
+                        title="Add to Radar"
+                        onPress={()=> handleAddToRadar(product?.id)}
+                        style={styles.radar}
+                        textStyle={{
+                            fontSize: 15,
+                            fontWeight: "normal",
+                        }}
+                    />
+                    
+                </View>
+                <View style={styles.radarShareWrapper}>
+                    <TouchableOpacity style={styles.button} onPress={()=> openBuyNowLink(product?.originalUrl)}>
+                        <AppText style={styles.buttonText}>Buy Now</AppText>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.share} onPress={()=> handleShare(product)}>
+                        <Icon 
+                            name="share"
+                            size={20}
+                            color={colors.amberGlow}
+                        />
+                        <AppText style={styles.shareText}>SHARE</AppText>
+                    </TouchableOpacity>
+                </View>
+                
             </View>
         </View>
     </Screen>
@@ -225,23 +240,24 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        flex: 1,
-        height: 50,
-        padding: 10,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         borderRadius: 5,
-        backgroundColor: colors.amberGlowLight,
+        backgroundColor: colors.misty,
     },
     button: {
-        flex: 1,
-        height: 50,
         borderRadius: 5,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: colors.horizon,
     },
     buttonText: {
         textTransform: "uppercase",
-        fontWeight: "bold",
+        fontWeight: "normal",
+        color: colors.amberGlow,
+        fontSize: 14,
     },
     buttonWrapper: {
         flexDirection: "row",
@@ -297,6 +313,10 @@ const styles = StyleSheet.create({
     },
     radar: {
         borderRadius: 5,
+        width: 'auto',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        height: 36,
     },
     radarShareWrapper: {
         marginBottom: 20,
@@ -314,13 +334,13 @@ const styles = StyleSheet.create({
     share: {
         borderRadius: 5,
         backgroundColor: colors.horizon,
-        padding: 5,
-        width: "25%",
+        paddingVertical: 2,
+        width: "20%",
         justifyContent: "center",
         alignItems: "center",
     },
     shareText: {
-        fontSize: 14,
+        fontSize: 10,
     },
     store: {
         fontSize: 18,

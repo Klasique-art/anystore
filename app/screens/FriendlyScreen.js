@@ -123,9 +123,20 @@ function FriendlyScreen({navigation}) {
           {/* end of tab */}
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.body}>
-
           {tabOption === "Created" && (
             <View style={styles.createdGroups}>
+              {
+              // if there are no created groups
+              groups?.createdGroups?.length === 0 && (
+                <View style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}>
+                  <AppText style={{ color: colors.white }}>You have not created any group yet.</AppText>
+                </View>
+              )
+            }
             {
               groups?.createdGroups?.map((group) => (
                 <TouchableOpacity key={group._id} style={styles.groupCard} onPress={()=>openChat(group.groupName, group._id, true)}>
@@ -139,6 +150,18 @@ function FriendlyScreen({navigation}) {
 
           {tabOption === "Joined" && (
             <View style={styles.joinedGroups}>
+              {
+                // if there are no joined groups
+                groups?.joinedGroups?.length === 0 && (
+                  <View style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
+                    <AppText style={{ color: colors.white }}>You have not joined any group yet.</AppText>
+                  </View>
+                )
+              }
               {
                 groups?.joinedGroups?.map((group) => (
                   <TouchableOpacity key={group?._id} style={styles.groupCard} onPress={()=>openChat(group?.groupName, group?._id, false)}>

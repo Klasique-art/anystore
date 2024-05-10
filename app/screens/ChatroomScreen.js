@@ -33,14 +33,14 @@ function ChatroomScreen({route, navigation}) {
   const { groupName, groupId, setGroups, isCreatedGroup } = route.params;
 
   socket.on("connect", () => {
-    console.log("Connected to the Socket.IO server");
+    // console.log("Connected to the Socket.IO server");
     socket.emit('joinRoom', groupId);
   });
 
   // socket message
   useEffect(() => {
     socket.on("message", (newMessage) => {
-      console.log('new message sender:', newMessage);
+      console.log('new message sent:', newMessage);
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
     
@@ -209,6 +209,7 @@ function ChatroomScreen({route, navigation}) {
     }
 
     const handleSendMsg = async (roomId, message, senderId) => {
+      console.log('message:', message, 'senderId:', senderId, 'roomId:', roomId)
       try {
         if (message.trim().length === 0) return;
 
@@ -309,6 +310,9 @@ function ChatroomScreen({route, navigation}) {
       fetchGroupMembers();
     }, [groupId, groupMembers]);
 
+    useEffect(() => {
+    console.log("messages", messages)
+  }, [messages])
     
   return (
     <Screen style={styles.screen}>

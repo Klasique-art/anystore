@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AnyStore",
-    "slug": "AnyStore",
+    "slug": "anystore",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/a_icon.png",
@@ -23,15 +23,16 @@
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.klasique.AnyStore"
+      "package": "com.eritten.anystore"
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "8c62316e-b23b-41a3-9080-13e19b3de3e1"
+        "projectId": "31747184-c43c-4f9c-b2e9-43e7ce13c4e6"
       }
-    }
+    },
+    "owner": "eritten"
   }
 }

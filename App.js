@@ -2,7 +2,6 @@ import 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
-import logger from './app/utility/logger';
 
 // custom imports
 import colors from './app/config/colors';
@@ -11,8 +10,6 @@ import OfflineNotice from './app/components/OfflineNotice';
 import AuthNavigation from './app/navigation/AuthNavigation';
 import AuthContext from './app/auth/context';
 import authStorage from './app/auth/storage';
-
-logger.start();
 
 export default function App() {
   const [user, setUser] = useState()

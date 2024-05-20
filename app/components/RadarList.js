@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native'
 import {useNavigation} from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import logger from '../utility/logger'
 
 import CartItem from './cart/CartItem'
 import SearchInput from './SearchInput'
@@ -31,7 +30,7 @@ function RadarList(props) {
       }
       
     } catch (error) {
-      logger.log(new Error('Error fetching radar items:' ,error))
+      console.log(error)
     } finally {
       setLoading(false)
     }
